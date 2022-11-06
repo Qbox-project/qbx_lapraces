@@ -93,9 +93,9 @@ local function GetRaceId(name)
 end
 
 local function GenerateRaceId()
-    local RaceId = "LR-" .. math.random(0000000, 9999999)
+    local RaceId = "LR-" .. math.random(0, 9999999)
     while Races[RaceId] ~= nil do
-        RaceId = "LR-" .. math.random(0000000, 9999999)
+        RaceId = "LR-" .. math.random(0, 9999999)
     end
     return RaceId
 end
@@ -567,7 +567,7 @@ end)
 
 CreateThread(function()
     local races = MySQL.query.await('SELECT * FROM lapraces', {})
-    if races and races[1] ~= nil then
+    if races and races[1] then
         for _, v in pairs(races) do
             local Records = {}
             if v.records ~= nil then
