@@ -155,7 +155,7 @@ local function PylonsLoop()
                 DrawText3Ds(Offset.left.x, Offset.left.y, Offset.left.z, Lang:t('general.CheckL'))
                 DrawText3Ds(Offset.right.x, Offset.right.y, Offset.right.z, Lang:t('general.CheckR'))
             end
-            Wait(3)
+            Wait(0)
         end
     end)
 end
@@ -397,7 +397,7 @@ local function CreatorLoop()
                     CreatorData.ConfirmDelete = false
                 end
             end
-            Wait(3)
+            Wait(0)
         end
     end)
 end
@@ -748,7 +748,7 @@ RegisterNetEvent('qb-lapraces:client:WaitingDistanceCheck', function()
             else
                 break
             end
-            Wait(3)
+            Wait(0)
         end
     end)
 end)
