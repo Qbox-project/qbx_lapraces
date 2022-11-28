@@ -102,6 +102,64 @@ local function GetClosestCheckpoint()
     RaceData.ClosestCheckpoint = current
 end
 
+local function SetupPiles()
+    for k, v in pairs(CreatorData.Checkpoints) do
+        if CreatorData.Checkpoints[k].pileleft == nil then
+            ClearAreaOfObjects(v.offset.left.x, v.offset.left.y, v.offset.left.z, 50.0, 0)
+            CreatorData.Checkpoints[k].pileleft = CreateObject(`prop_offroad_tyres02`, v.offset.left.x, v.offset.left.y, v.offset.left.z, 0, 0, 0)
+            PlaceObjectOnGroundProperly(CreatorData.Checkpoints[k].pileleft)
+            FreezeEntityPosition(CreatorData.Checkpoints[k].pileleft, 1)
+            SetEntityAsMissionEntity(CreatorData.Checkpoints[k].pileleft, 1, 1)
+        end
+
+        if CreatorData.Checkpoints[k].pileright == nil then
+            ClearAreaOfObjects(v.offset.right.x, v.offset.right.y, v.offset.right.z, 50.0, 0)
+            CreatorData.Checkpoints[k].pileright = CreateObject(`prop_offroad_tyres02`, v.offset.right.x, v.offset.right.y, v.offset.right.z, 0, 0, 0)
+            PlaceObjectOnGroundProperly(CreatorData.Checkpoints[k].pileright)
+            FreezeEntityPosition(CreatorData.Checkpoints[k].pileleft, 1)
+            SetEntityAsMissionEntity(CreatorData.Checkpoints[k].pileleft, 1, 1)
+        end
+    end
+end
+
+local function CheckpointLoop()
+    CreateThread(function()
+        while RaceData.InCreator do
+            GetClosestCheckpoint()
+            SetupPiles()
+            Wait(1000)
+        end
+    end)
+end
+
+local function PylonsLoop()
+    CreateThread(function()
+        while RaceData.InCreator do
+            local PlayerPed = PlayerPedId()
+            local PlayerVeh = GetVehiclePedIsIn(PlayerPed, false)
+
+            if PlayerVeh ~= 0 then
+                local Offset = {
+                    left = {
+                        x = (GetOffsetFromEntityInWorldCoords(PlayerVeh, -CreatorData.TireDistance, 0.0, 0.0)).x,
+                        y = (GetOffsetFromEntityInWorldCoords(PlayerVeh, -CreatorData.TireDistance, 0.0, 0.0)).y,
+                        z = (GetOffsetFromEntityInWorldCoords(PlayerVeh, -CreatorData.TireDistance, 0.0, 0.0)).z,
+                    },
+                    right = {
+                        x = (GetOffsetFromEntityInWorldCoords(PlayerVeh, CreatorData.TireDistance, 0.0, 0.0)).x,
+                        y = (GetOffsetFromEntityInWorldCoords(PlayerVeh, CreatorData.TireDistance, 0.0, 0.0)).y,
+                        z = (GetOffsetFromEntityInWorldCoords(PlayerVeh, CreatorData.TireDistance, 0.0, 0.0)).z,
+                    }
+                }
+
+                DrawText3Ds(Offset.left.x, Offset.left.y, Offset.left.z, Lang:t('general.CheckL'))
+                DrawText3Ds(Offset.right.x, Offset.right.y, Offset.right.z, Lang:t('general.CheckR'))
+            end
+            Wait(3)
+        end
+    end)
+end
+
 local function CreatorUI()
     CreateThread(function()
         while true do
@@ -460,26 +518,6 @@ local function DoPilePfx()
     end
 end
 
-local function SetupPiles()
-    for k, v in pairs(CreatorData.Checkpoints) do
-        if CreatorData.Checkpoints[k].pileleft == nil then
-            ClearAreaOfObjects(v.offset.left.x, v.offset.left.y, v.offset.left.z, 50.0, 0)
-            CreatorData.Checkpoints[k].pileleft = CreateObject(`prop_offroad_tyres02`, v.offset.left.x, v.offset.left.y, v.offset.left.z, 0, 0, 0)
-            PlaceObjectOnGroundProperly(CreatorData.Checkpoints[k].pileleft)
-            FreezeEntityPosition(CreatorData.Checkpoints[k].pileleft, 1)
-            SetEntityAsMissionEntity(CreatorData.Checkpoints[k].pileleft, 1, 1)
-        end
-
-        if CreatorData.Checkpoints[k].pileright == nil then
-            ClearAreaOfObjects(v.offset.right.x, v.offset.right.y, v.offset.right.z, 50.0, 0)
-            CreatorData.Checkpoints[k].pileright = CreateObject(`prop_offroad_tyres02`, v.offset.right.x, v.offset.right.y, v.offset.right.z, 0, 0, 0)
-            PlaceObjectOnGroundProperly(CreatorData.Checkpoints[k].pileright)
-            FreezeEntityPosition(CreatorData.Checkpoints[k].pileleft, 1)
-            SetEntityAsMissionEntity(CreatorData.Checkpoints[k].pileleft, 1, 1)
-        end
-    end
-end
-
 local function GetMaxDistance(OffsetCoords)
     local Distance = #(vector3(OffsetCoords.left.x, OffsetCoords.left.y, OffsetCoords.left.z) - vector3(OffsetCoords.right.x, OffsetCoords.right.y, OffsetCoords.right.z))
     local Retval = 7.5
@@ -578,6 +616,8 @@ RegisterNetEvent('qb-lapraces:client:StartRaceEditor', function(RaceName)
         RaceData.InCreator = true
         CreatorUI()
         CreatorLoop()
+        CheckpointLoop()
+        PylonsLoop()
     else
         QBCore.Functions.Notify(Lang:t('error.alreadymaking'), 'error')
     end
@@ -714,35 +754,6 @@ RegisterNetEvent('qb-lapraces:client:WaitingDistanceCheck', function()
 end)
 
 -- Threads
-
-CreateThread(function()
-    while true do
-        if RaceData.InCreator then
-            local PlayerPed = PlayerPedId()
-            local PlayerVeh = GetVehiclePedIsIn(PlayerPed)
-
-            if PlayerVeh ~= 0 then
-                local Offset = {
-                    left = {
-                        x = (GetOffsetFromEntityInWorldCoords(PlayerVeh, -CreatorData.TireDistance, 0.0, 0.0)).x,
-                        y = (GetOffsetFromEntityInWorldCoords(PlayerVeh, -CreatorData.TireDistance, 0.0, 0.0)).y,
-                        z = (GetOffsetFromEntityInWorldCoords(PlayerVeh, -CreatorData.TireDistance, 0.0, 0.0)).z,
-                    },
-                    right = {
-                        x = (GetOffsetFromEntityInWorldCoords(PlayerVeh, CreatorData.TireDistance, 0.0, 0.0)).x,
-                        y = (GetOffsetFromEntityInWorldCoords(PlayerVeh, CreatorData.TireDistance, 0.0, 0.0)).y,
-                        z = (GetOffsetFromEntityInWorldCoords(PlayerVeh, CreatorData.TireDistance, 0.0, 0.0)).z,
-                    }
-                }
-
-                DrawText3Ds(Offset.left.x, Offset.left.y, Offset.left.z, Lang:t('general.CheckL'))
-                DrawText3Ds(Offset.right.x, Offset.right.y, Offset.right.z, Lang:t('general.CheckR'))
-            end
-        end
-        Wait(3)
-    end
-end)
-
 CreateThread(function()
     while true do
 
@@ -838,24 +849,14 @@ end)
 
 CreateThread(function()
     while true do
-        if RaceData.InCreator then
-            GetClosestCheckpoint()
-            SetupPiles()
-        end
-        Wait(1000)
-    end
-end)
-
-CreateThread(function()
-    while true do
         local Driver, plyVeh = Info()
         if Driver then
             if GetVehicleCurrentGear(plyVeh) < 3 and GetVehicleCurrentRpm(plyVeh) == 1.0 and math.ceil(GetEntitySpeed(plyVeh) * 2.236936) > 50 then
-              while GetVehicleCurrentRpm(plyVeh) > 0.6 do
-                  SetVehicleCurrentRpm(plyVeh, 0.3)
-                  Wait(1)
-              end
-              Wait(800)
+                while GetVehicleCurrentRpm(plyVeh) > 0.6 do
+                    SetVehicleCurrentRpm(plyVeh, 0.3)
+                    Wait(1)
+                end
+            Wait(800)
             end
         end
         Wait(500)
