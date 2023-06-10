@@ -29,73 +29,73 @@ local CurrentRaceData = {
 -- Handlers
 
 AddEventHandler('onResourceStop', function(resource)
-    if resource == GetCurrentResourceName() then
-        for k, _ in pairs(CreatorData.Checkpoints) do
-            if CreatorData.Checkpoints[k].pileleft ~= nil then
-                local coords = CreatorData.Checkpoints[k].offset.right
-                local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
-                DeleteObject(Obj)
-                ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-                CreatorData.Checkpoints[k].pileright = nil
-            end
-            if CreatorData.Checkpoints[k].pileright ~= nil then
-                local coords = CreatorData.Checkpoints[k].offset.right
-                local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
-                DeleteObject(Obj)
-                ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-                CreatorData.Checkpoints[k].pileright = nil
-            end
-        end
+    if resource ~= GetCurrentResourceName() then return end
 
-        for k, _ in pairs(CurrentRaceData.Checkpoints) do
-            if CurrentRaceData.Checkpoints[k] ~= nil then
-                if CurrentRaceData.Checkpoints[k].pileleft ~= nil then
-                    local coords = CurrentRaceData.Checkpoints[k].offset.right
-                    local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
-                    DeleteObject(Obj)
-                    ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-                    CurrentRaceData.Checkpoints[k].pileright = nil
-                end
-                if CurrentRaceData.Checkpoints[k].pileright ~= nil then
-                    local coords = CurrentRaceData.Checkpoints[k].offset.right
-                    local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
-                    DeleteObject(Obj)
-                    ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-                    CurrentRaceData.Checkpoints[k].pileright = nil
-                end
-            end
+    for _, v in pairs(CreatorData.Checkpoints) do
+        if v.pileleft then
+            local coords = v.offset.right
+            local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
+            DeleteObject(Obj)
+            ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
+            v.pileright = nil
+        end
+        if v.pileright then
+            local coords = v.offset.right
+            local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
+            DeleteObject(Obj)
+            ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
+            v.pileright = nil
+        end
+    end
+
+    for k, v in pairs(CurrentRaceData.Checkpoints) do
+        if v.pileleft then
+            local coords = v.offset.right
+            local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
+            DeleteObject(Obj)
+            ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
+            v.pileright = nil
+        end
+        if v.pileright then
+            local coords = v.offset.right
+            local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
+            DeleteObject(Obj)
+            ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
+            v.pileright = nil
         end
     end
 end)
 
 -- Functions
+
 local function DrawText3Ds(x, y, z, text)
 	SetTextScale(0.35, 0.35)
     SetTextFont(4)
-    SetTextProportional(1)
+    SetTextProportional(true)
     SetTextColour(255, 255, 255, 215)
-    SetTextEntry("STRING")
+    BeginTextCommandDisplayText("STRING")
     SetTextCentre(true)
-    AddTextComponentString(text)
+    AddTextComponentSubstringPlayerName(text)
     SetDrawOrigin(x,y,z, 0)
-    DrawText(0.0, 0.0)
-    local factor = (string.len(text)) / 370
-    DrawRect(0.0, 0.0+0.0125, 0.017+ factor, 0.03, 0, 0, 0, 75)
+    EndTextCommandDisplayText(0.0, 0.0)
+    local factor = string.len(text) / 370
+    DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
     ClearDrawOrigin()
 end
 
 local function GetClosestCheckpoint()
-    local pos = GetEntityCoords(PlayerPedId(), true)
+    local pos = GetEntityCoords(cache.ped, true)
     local current = nil
     local dist = nil
-    for id, _ in pairs(CreatorData.Checkpoints) do
-        if current ~= nil then
-            if #(pos - vector3(CreatorData.Checkpoints[id].coords.x, CreatorData.Checkpoints[id].coords.y, CreatorData.Checkpoints[id].coords.z)) < dist then
+    for id, v in pairs(CreatorData.Checkpoints) do
+        local dist2 = #(pos - v.coords.xyz)
+        if current then
+            if dist2 < dist then
                 current = id
-                dist = #(pos - vector3(CreatorData.Checkpoints[id].coords.x, CreatorData.Checkpoints[id].coords.y, CreatorData.Checkpoints[id].coords.z))
+                dist = dist2
             end
         else
-            dist = #(pos - vector3(CreatorData.Checkpoints[id].coords.x, CreatorData.Checkpoints[id].coords.y, CreatorData.Checkpoints[id].coords.z))
+            dist = dist2
             current = id
         end
     end
@@ -103,21 +103,21 @@ local function GetClosestCheckpoint()
 end
 
 local function SetupPiles()
-    for k, v in pairs(CreatorData.Checkpoints) do
-        if CreatorData.Checkpoints[k].pileleft == nil then
+    for _, v in pairs(CreatorData.Checkpoints) do
+        if not v.pileleft then
             ClearAreaOfObjects(v.offset.left.x, v.offset.left.y, v.offset.left.z, 50.0, 0)
-            CreatorData.Checkpoints[k].pileleft = CreateObject(`prop_offroad_tyres02`, v.offset.left.x, v.offset.left.y, v.offset.left.z, false, false, false)
-            PlaceObjectOnGroundProperly(CreatorData.Checkpoints[k].pileleft)
-            FreezeEntityPosition(CreatorData.Checkpoints[k].pileleft, true)
-            SetEntityAsMissionEntity(CreatorData.Checkpoints[k].pileleft, true, true)
+            v.pileleft = CreateObject(`prop_offroad_tyres02`, v.offset.left.x, v.offset.left.y, v.offset.left.z, false, false, false)
+            PlaceObjectOnGroundProperly(v.pileleft)
+            FreezeEntityPosition(v.pileleft, true)
+            SetEntityAsMissionEntity(v.pileleft, true, true)
         end
 
-        if CreatorData.Checkpoints[k].pileright == nil then
+        if not v.pileright then
             ClearAreaOfObjects(v.offset.right.x, v.offset.right.y, v.offset.right.z, 50.0, 0)
-            CreatorData.Checkpoints[k].pileright = CreateObject(`prop_offroad_tyres02`, v.offset.right.x, v.offset.right.y, v.offset.right.z, false, false, false)
-            PlaceObjectOnGroundProperly(CreatorData.Checkpoints[k].pileright)
-            FreezeEntityPosition(CreatorData.Checkpoints[k].pileleft, true)
-            SetEntityAsMissionEntity(CreatorData.Checkpoints[k].pileleft, true, true)
+            v.pileright = CreateObject(`prop_offroad_tyres02`, v.offset.right.x, v.offset.right.y, v.offset.right.z, false, false, false)
+            PlaceObjectOnGroundProperly(v.pileright)
+            FreezeEntityPosition(v.pileleft, true)
+            SetEntityAsMissionEntity(v.pileleft, true, true)
         end
     end
 end
@@ -135,25 +135,11 @@ end
 local function PylonsLoop()
     CreateThread(function()
         while RaceData.InCreator do
-            local PlayerPed = PlayerPedId()
-            local PlayerVeh = GetVehiclePedIsIn(PlayerPed, false)
-
-            if PlayerVeh ~= 0 then
-                local Offset = {
-                    left = {
-                        x = (GetOffsetFromEntityInWorldCoords(PlayerVeh, -CreatorData.TireDistance, 0.0, 0.0)).x,
-                        y = (GetOffsetFromEntityInWorldCoords(PlayerVeh, -CreatorData.TireDistance, 0.0, 0.0)).y,
-                        z = (GetOffsetFromEntityInWorldCoords(PlayerVeh, -CreatorData.TireDistance, 0.0, 0.0)).z,
-                    },
-                    right = {
-                        x = (GetOffsetFromEntityInWorldCoords(PlayerVeh, CreatorData.TireDistance, 0.0, 0.0)).x,
-                        y = (GetOffsetFromEntityInWorldCoords(PlayerVeh, CreatorData.TireDistance, 0.0, 0.0)).y,
-                        z = (GetOffsetFromEntityInWorldCoords(PlayerVeh, CreatorData.TireDistance, 0.0, 0.0)).z,
-                    }
-                }
-
-                DrawText3Ds(Offset.left.x, Offset.left.y, Offset.left.z, Lang:t('general.CheckL'))
-                DrawText3Ds(Offset.right.x, Offset.right.y, Offset.right.z, Lang:t('general.CheckR'))
+            if cache.vehicle then
+                local left = GetOffsetFromEntityInWorldCoords(cache.vehicle, -CreatorData.TireDistance, 0.0, 0.0)
+                local right = GetOffsetFromEntityInWorldCoords(cache.vehicle, -CreatorData.TireDistance, 0.0, 0.0)
+                DrawText3Ds(left.x, left.y, left.z, Lang:t('general.CheckL'))
+                DrawText3Ds(right.x, right.y, right.z, Lang:t('general.CheckR'))
             end
             Wait(0)
         end
@@ -189,29 +175,30 @@ end
 local function DeleteCheckpoint()
     local NewCheckpoints = {}
     if RaceData.ClosestCheckpoint ~= 0 then
-        if CreatorData.Checkpoints[RaceData.ClosestCheckpoint] ~= nil then
-            if CreatorData.Checkpoints[RaceData.ClosestCheckpoint].blip ~= nil then
-                RemoveBlip(CreatorData.Checkpoints[RaceData.ClosestCheckpoint].blip)
-                CreatorData.Checkpoints[RaceData.ClosestCheckpoint].blip = nil
+        local curCheckpoint = CreatorData.Checkpoints[RaceData.ClosestCheckpoint]
+        if curCheckpoint then
+            if curCheckpoint.blip then
+                RemoveBlip(curCheckpoint.blip)
+                curCheckpoint.blip = nil
             end
-            if CreatorData.Checkpoints[RaceData.ClosestCheckpoint].pileleft ~= nil then
-                local coords = CreatorData.Checkpoints[RaceData.ClosestCheckpoint].offset.left
+            if curCheckpoint.pileleft then
+                local coords = curCheckpoint.offset.left
                 local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
                 DeleteObject(Obj)
                 ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-                CreatorData.Checkpoints[RaceData.ClosestCheckpoint].pileleft = nil
+                curCheckpoint.pileleft = nil
             end
-            if CreatorData.Checkpoints[RaceData.ClosestCheckpoint].pileright ~= nil then
-                local coords = CreatorData.Checkpoints[RaceData.ClosestCheckpoint].offset.right
+            if curCheckpoint.pileright then
+                local coords = curCheckpoint.offset.right
                 local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
                 DeleteObject(Obj)
                 ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-                CreatorData.Checkpoints[RaceData.ClosestCheckpoint].pileright = nil
+                curCheckpoint.pileright = nil
             end
 
             for id, data in pairs(CreatorData.Checkpoints) do
                 if id ~= RaceData.ClosestCheckpoint then
-                    NewCheckpoints[#NewCheckpoints+1] = data
+                    NewCheckpoints[#NewCheckpoints + 1] = data
                 end
             end
             CreatorData.Checkpoints = NewCheckpoints
@@ -228,8 +215,8 @@ local function SaveRace()
 
     for k, v in pairs(CreatorData.Checkpoints) do
         if k + 1 <= #CreatorData.Checkpoints then
-            local checkpointdistance = #(vector3(v.coords.x, v.coords.y, v.coords.z) - vector3(CreatorData.Checkpoints[k + 1].coords.x, CreatorData.Checkpoints[k + 1].coords.y, CreatorData.Checkpoints[k + 1].coords.z))
-            RaceDistance = RaceDistance + checkpointdistance
+            local checkpointdistance = #(v.coords - CreatorData.Checkpoints[k + 1].coords)
+            RaceDistance += checkpointdistance
         end
     end
 
@@ -239,26 +226,25 @@ local function SaveRace()
 
     QBCore.Functions.Notify(Lang:t('success.savedrace', {racename = CreatorData.RaceName}), 'success')
 
-    for id,_ in pairs(CreatorData.Checkpoints) do
-        if CreatorData.Checkpoints[id].blip ~= nil then
-            RemoveBlip(CreatorData.Checkpoints[id].blip)
-            CreatorData.Checkpoints[id].blip = nil
+    for _, v in pairs(CreatorData.Checkpoints) do
+        if v.blip then
+            RemoveBlip(v.blip)
+            v.blip = nil
         end
-        if CreatorData.Checkpoints[id] ~= nil then
-            if CreatorData.Checkpoints[id].pileleft ~= nil then
-                local coords = CreatorData.Checkpoints[id].offset.left
-                local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
-                DeleteObject(Obj)
-                ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-                CreatorData.Checkpoints[id].pileleft = nil
-            end
-            if CreatorData.Checkpoints[id].pileright ~= nil then
-                local coords = CreatorData.Checkpoints[id].offset.right
-                local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
-                DeleteObject(Obj)
-                ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-                CreatorData.Checkpoints[id].pileright = nil
-            end
+
+        if v.pileleft then
+            local coords = v.offset.left
+            local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
+            DeleteObject(Obj)
+            ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
+            v.pileleft = nil
+        end
+        if v.pileright then
+            local coords = v.offset.right
+            local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
+            DeleteObject(Obj)
+            ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
+            v.pileright = nil
         end
     end
 
@@ -268,65 +254,46 @@ local function SaveRace()
 end
 
 local function AddCheckpoint()
-    local PlayerPed = PlayerPedId()
-    local PlayerPos = GetEntityCoords(PlayerPed)
-    local PlayerVeh = GetVehiclePedIsIn(PlayerPed, false)
-    local Offset = {
-        left = {
-            x = (GetOffsetFromEntityInWorldCoords(PlayerVeh, -CreatorData.TireDistance, 0.0, 0.0)).x,
-            y = (GetOffsetFromEntityInWorldCoords(PlayerVeh, -CreatorData.TireDistance, 0.0, 0.0)).y,
-            z = (GetOffsetFromEntityInWorldCoords(PlayerVeh, -CreatorData.TireDistance, 0.0, 0.0)).z,
-        },
-        right = {
-            x = (GetOffsetFromEntityInWorldCoords(PlayerVeh, CreatorData.TireDistance, 0.0, 0.0)).x,
-            y = (GetOffsetFromEntityInWorldCoords(PlayerVeh, CreatorData.TireDistance, 0.0, 0.0)).y,
-            z = (GetOffsetFromEntityInWorldCoords(PlayerVeh, CreatorData.TireDistance, 0.0, 0.0)).z,
-        }
+    local offset = {
+        left = GetOffsetFromEntityInWorldCoords(cache.vehicle, -CreatorData.TireDistance, 0.0, 0.0),
+        right = GetOffsetFromEntityInWorldCoords(cache.vehicle, CreatorData.TireDistance, 0.0, 0.0)
     }
 
-    CreatorData.Checkpoints[#CreatorData.Checkpoints+1] = {
-        coords = {
-            x = PlayerPos.x,
-            y = PlayerPos.y,
-            z = PlayerPos.z,
-        },
-        offset = Offset,
+    CreatorData.Checkpoints[#CreatorData.Checkpoints + 1] = {
+        coords = GetEntityCoords(cache.ped),
+        offset = offset,
     }
 
-
-    for id, CheckpointData in pairs(CreatorData.Checkpoints) do
-        if CheckpointData.blip ~= nil then
-            RemoveBlip(CheckpointData.blip)
+    for id, checkpointData in pairs(CreatorData.Checkpoints) do
+        if checkpointData.blip then
+            RemoveBlip(checkpointData.blip)
         end
 
-        CheckpointData.blip = AddBlipForCoord(CheckpointData.coords.x, CheckpointData.coords.y, CheckpointData.coords.z)
+        checkpointData.blip = AddBlipForCoord(checkpointData.coords.x, checkpointData.coords.y, checkpointData.coords.z)
 
-        SetBlipSprite(CheckpointData.blip, 1)
-        SetBlipDisplay(CheckpointData.blip, 4)
-        SetBlipScale(CheckpointData.blip, 0.8)
-        SetBlipAsShortRange(CheckpointData.blip, true)
-        SetBlipColour(CheckpointData.blip, 26)
-        ShowNumberOnBlip(CheckpointData.blip, id)
-        SetBlipShowCone(CheckpointData.blip, false)
+        SetBlipSprite(checkpointData.blip, 1)
+        SetBlipDisplay(checkpointData.blip, 4)
+        SetBlipScale(checkpointData.blip, 0.8)
+        SetBlipAsShortRange(checkpointData.blip, true)
+        SetBlipColour(checkpointData.blip, 26)
+        ShowNumberOnBlip(checkpointData.blip, id)
+        SetBlipShowCone(checkpointData.blip, false)
         BeginTextCommandSetBlipName("STRING")
         AddTextComponentSubstringPlayerName("Checkpoint: "..id)
-        EndTextCommandSetBlipName(CheckpointData.blip)
+        EndTextCommandSetBlipName(checkpointData.blip)
     end
 end
 
 local function CreatorLoop()
     CreateThread(function()
         while RaceData.InCreator do
-            local PlayerPed = PlayerPedId()
-            local PlayerVeh = GetVehiclePedIsIn(PlayerPed, false)
-
-            if PlayerVeh ~= 0 then
+            if cache.vehicle then
                 if IsControlJustPressed(0, 161) or IsDisabledControlJustPressed(0, 161) then
                     AddCheckpoint()
                 end
 
                 if IsControlJustPressed(0, 162) or IsDisabledControlJustPressed(0, 162) then
-                    if CreatorData.Checkpoints ~= nil and next(CreatorData.Checkpoints) ~= nil then
+                    if CreatorData.Checkpoints and table.type(CreatorData.Checkpoints) ~= 'empty' then
                         DeleteCheckpoint()
                     else
                         QBCore.Functions.Notify(Lang:t('error.nocheckpoints'), 'error')
@@ -334,7 +301,7 @@ local function CreatorLoop()
                 end
 
                 if IsControlJustPressed(0, 311) or IsDisabledControlJustPressed(0, 311) then
-                    if CreatorData.Checkpoints ~= nil and #CreatorData.Checkpoints >= 2 then
+                    if CreatorData.Checkpoints and #CreatorData.Checkpoints >= 2 then
                         SaveRace()
                     else
                         QBCore.Functions.Notify(Lang:t('error.atleast10checkp'), 'error')
@@ -357,7 +324,7 @@ local function CreatorLoop()
                     end
                 end
             else
-                local coords = GetEntityCoords(PlayerPedId())
+                local coords = GetEntityCoords(cache.ped)
                 DrawText3Ds(coords.x, coords.y, coords.z, Lang:t('error.mustbeinveh'))
             end
 
@@ -366,27 +333,27 @@ local function CreatorLoop()
                     CreatorData.ConfirmDelete = true
                     QBCore.Functions.Notify(Lang:t('error.pressagain'), 'error', 5000)
                 else
-                    for _, CheckpointData in pairs(CreatorData.Checkpoints) do
-                        if CheckpointData.blip ~= nil then
-                            RemoveBlip(CheckpointData.blip)
+                    for _, checkpointData in pairs(CreatorData.Checkpoints) do
+                        if checkpointData.blip then
+                            RemoveBlip(checkpointData.blip)
                         end
                     end
 
-                    for id,_ in pairs(CreatorData.Checkpoints) do
-                        if CreatorData.Checkpoints[id].pileleft ~= nil then
-                            local coords = CreatorData.Checkpoints[id].offset.left
+                    for _, v in pairs(CreatorData.Checkpoints) do
+                        if v.pileleft then
+                            local coords = v.offset.left
                             local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 8.0, `prop_offroad_tyres02`, false, false, false)
                             DeleteObject(Obj)
                             ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-                            CreatorData.Checkpoints[id].pileleft = nil
+                            v.pileleft = nil
                         end
 
-                        if CreatorData.Checkpoints[id].pileright ~= nil then
-                            local coords = CreatorData.Checkpoints[id].offset.right
+                        if v.pileright then
+                            local coords = v.offset.right
                             local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 8.0, `prop_offroad_tyres02`, false, false, false)
                             DeleteObject(Obj)
                             ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-                            CreatorData.Checkpoints[id].pileright = nil
+                            v.pileright = nil
                         end
                     end
 
@@ -405,10 +372,10 @@ end
 local function RaceUI()
     CreateThread(function()
         while true do
-            if CurrentRaceData.Checkpoints ~= nil and next(CurrentRaceData.Checkpoints) ~= nil then
+            if CurrentRaceData.Checkpoints and table.type(CurrentRaceData.Checkpoints) ~= 'empty' then
                 if CurrentRaceData.Started then
-                    CurrentRaceData.RaceTime = CurrentRaceData.RaceTime + 1
-                    CurrentRaceData.TotalTime = CurrentRaceData.TotalTime + 1
+                    CurrentRaceData.RaceTime += 1
+                    CurrentRaceData.TotalTime += 1
                 end
                 SendNUIMessage({
                     action = "Update",
@@ -443,7 +410,7 @@ local function RaceUI()
                 end
                 break
             end
-            Wait(12)
+            Wait(0)
         end
     end)
 end
@@ -467,78 +434,67 @@ local function SetupRace(sRaceData, Laps)
 
     for k, v in pairs(CurrentRaceData.Checkpoints) do
         ClearAreaOfObjects(v.offset.left.x, v.offset.left.y, v.offset.left.z, 50.0, 0)
-        CurrentRaceData.Checkpoints[k].pileleft = CreateObject(`prop_offroad_tyres02`, v.offset.left.x, v.offset.left.y, v.offset.left.z, false, false, false)
-        PlaceObjectOnGroundProperly(CurrentRaceData.Checkpoints[k].pileleft)
-        FreezeEntityPosition(CurrentRaceData.Checkpoints[k].pileleft, true)
-        SetEntityAsMissionEntity(CurrentRaceData.Checkpoints[k].pileleft, true, true)
+        v.pileleft = CreateObject(`prop_offroad_tyres02`, v.offset.left.x, v.offset.left.y, v.offset.left.z, false, false, false)
+        PlaceObjectOnGroundProperly(v.pileleft)
+        FreezeEntityPosition(v.pileleft, true)
+        SetEntityAsMissionEntity(v.pileleft, true, true)
 
         ClearAreaOfObjects(v.offset.right.x, v.offset.right.y, v.offset.right.z, 50.0, 0)
-        CurrentRaceData.Checkpoints[k].pileright = CreateObject(`prop_offroad_tyres02`, v.offset.right.x, v.offset.right.y, v.offset.right.z, false, false, false)
-        PlaceObjectOnGroundProperly(CurrentRaceData.Checkpoints[k].pileright)
-        FreezeEntityPosition(CurrentRaceData.Checkpoints[k].pileright, true)
-        SetEntityAsMissionEntity(CurrentRaceData.Checkpoints[k].pileright, true, true)
+        v.pileright = CreateObject(`prop_offroad_tyres02`, v.offset.right.x, v.offset.right.y, v.offset.right.z, false, false, false)
+        PlaceObjectOnGroundProperly(v.pileright)
+        FreezeEntityPosition(v.pileright, true)
+        SetEntityAsMissionEntity(v.pileright, true, true)
 
-        CurrentRaceData.Checkpoints[k].blip = AddBlipForCoord(v.coords.x, v.coords.y, v.coords.z)
-        SetBlipSprite(CurrentRaceData.Checkpoints[k].blip, 1)
-        SetBlipDisplay(CurrentRaceData.Checkpoints[k].blip, 4)
-        SetBlipScale(CurrentRaceData.Checkpoints[k].blip, 0.6)
-        SetBlipAsShortRange(CurrentRaceData.Checkpoints[k].blip, true)
-        SetBlipColour(CurrentRaceData.Checkpoints[k].blip, 26)
-        ShowNumberOnBlip(CurrentRaceData.Checkpoints[k].blip, k)
+        v.blip = AddBlipForCoord(v.coords.x, v.coords.y, v.coords.z)
+        SetBlipSprite(v.blip, 1)
+        SetBlipDisplay(v.blip, 4)
+        SetBlipScale(v.blip, 0.6)
+        SetBlipAsShortRange(v.blip, true)
+        SetBlipColour(v.blip, 26)
+        ShowNumberOnBlip(v.blip, k)
         BeginTextCommandSetBlipName("STRING")
         AddTextComponentSubstringPlayerName("Checkpoint: "..k)
-        EndTextCommandSetBlipName(CurrentRaceData.Checkpoints[k].blip)
+        EndTextCommandSetBlipName(v.blip)
     end
 
     RaceUI()
 end
 
 local function showNonLoopParticle(dict, particleName, coords, scale)
-    RequestNamedPtfxAsset(dict)
-    while not HasNamedPtfxAssetLoaded(dict) do
-        Wait(0)
-    end
+    lib.requestNamedPtfxAsset(dict)
     UseParticleFxAssetNextCall(dict)
-    local particleHandle = StartParticleFxLoopedAtCoord(particleName, coords.x, coords.y, coords.z, 0.0, 0.0, 0.0, scale, false, false, false)
+    local particleHandle = StartParticleFxLoopedAtCoord(particleName, coords.x, coords.y, coords.z, 0.0, 0.0, 0.0, scale, false, false, false, false)
     SetParticleFxLoopedColour(particleHandle, 0, 255, 0, false)
     return particleHandle
 end
 
 local function DoPilePfx()
-    if CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint] ~= nil then
-        local Timeout = 500
-        local Size = 2.0
-        local left = showNonLoopParticle('core', 'ent_sht_flame', CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint].offset.left, Size)
-        local right = showNonLoopParticle('core', 'ent_sht_flame', CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint].offset.right, Size)
+    if not CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint] then return end
 
-        SetTimeout(Timeout, function()
-            StopParticleFxLooped(left, false)
-            StopParticleFxLooped(right, false)
-        end)
-    end
+    local Timeout = 500
+    local Size = 2.0
+    local left = showNonLoopParticle('core', 'ent_sht_flame', CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint].offset.left, Size)
+    local right = showNonLoopParticle('core', 'ent_sht_flame', CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint].offset.right, Size)
+
+    SetTimeout(Timeout, function()
+        StopParticleFxLooped(left, false)
+        StopParticleFxLooped(right, false)
+    end)
 end
 
-local function GetMaxDistance(OffsetCoords)
-    local Distance = #(vector3(OffsetCoords.left.x, OffsetCoords.left.y, OffsetCoords.left.z) - vector3(OffsetCoords.right.x, OffsetCoords.right.y, OffsetCoords.right.z))
-    local Retval = 7.5
-    if Distance > 20.0 then
-        Retval = 12.5
-    end
-    return Retval
+local function GetMaxDistance(offsetCoords)
+    return #(offsetCoords.left - offsetCoords.right) > 20.0 and 12.5 or 7.5
 end
 
 local function SecondsToClock(seconds)
     seconds = tonumber(seconds)
-    local retval
-    if seconds <= 0 then
-        retval = "00:00:00";
-    else
-        local hours = string.format("%02.f", math.floor(seconds/3600));
-        local mins = string.format("%02.f", math.floor(seconds/60 - (hours*60)));
-        local secs = string.format("%02.f", math.floor(seconds - hours*3600 - mins *60));
-        retval = hours..":"..mins..":"..secs
+    if seconds > 0 then
+        local hours = string.format("%02.f", math.floor(seconds / 3600))
+        local mins = string.format("%02.f", math.floor(seconds / 60 - (hours * 60)))
+        local secs = string.format("%02.f", math.floor(seconds - hours * 3600 - mins * 60))
+        return hours..":"..mins..":"..secs
     end
-    return retval
+    return "00:00:00"
 end
 
 local function FinishRace()
@@ -548,24 +504,24 @@ local function FinishRace()
     else
         QBCore.Functions.Notify(Lang:t('success.finished', {time = SecondsToClock(CurrentRaceData.TotalTime)}))
     end
-    for k, _ in pairs(CurrentRaceData.Checkpoints) do
-        if CurrentRaceData.Checkpoints[k].blip ~= nil then
-            RemoveBlip(CurrentRaceData.Checkpoints[k].blip)
-            CurrentRaceData.Checkpoints[k].blip = nil
+    for k, v in pairs(CurrentRaceData.Checkpoints) do
+        if v.blip then
+            RemoveBlip(v.blip)
+            v.blip = nil
         end
-        if CurrentRaceData.Checkpoints[k].pileleft ~= nil then
-            local coords = CurrentRaceData.Checkpoints[k].offset.left
+        if v.pileleft then
+            local coords = v.offset.left
             local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
             DeleteObject(Obj)
             ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-            CurrentRaceData.Checkpoints[k].pileleft = nil
+            v.pileleft = nil
         end
-        if CurrentRaceData.Checkpoints[k].pileright ~= nil then
-            local coords = CurrentRaceData.Checkpoints[k].offset.right
+        if v.pileright then
+            local coords = v.offset.right
             local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
             DeleteObject(Obj)
             ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-            CurrentRaceData.Checkpoints[k].pileright = nil
+            v.pileright = nil
         end
     end
     CurrentRaceData.RaceName = nil
@@ -581,28 +537,12 @@ local function FinishRace()
     RaceData.InRace = false
 end
 
-local function Info()
-    local PlayerPed = PlayerPedId()
-    local plyVeh = GetVehiclePedIsIn(PlayerPed, false)
-    local IsDriver = GetPedInVehicleSeat(plyVeh, -1) == PlayerPed
-    local returnValue = plyVeh ~= 0 and plyVeh ~= nil and IsDriver
-    return returnValue, plyVeh
-end
-
 local function IsInRace()
-    local retval = false
-    if RaceData.InRace then
-        retval = true
-    end
-    return retval
+    return RaceData.InRace
 end
 
 local function IsInEditor()
-    local retval = false
-    if RaceData.InCreator then
-        retval = true
-    end
-    return retval
+    return RaceData.InCreator
 end
 
 exports('IsInEditor', IsInEditor)
@@ -611,54 +551,56 @@ exports('IsInRace', IsInRace)
 -- Events
 
 RegisterNetEvent('qb-lapraces:client:StartRaceEditor', function(RaceName)
-    if not RaceData.InCreator then
-        CreatorData.RaceName = RaceName
-        RaceData.InCreator = true
-        CreatorUI()
-        CreatorLoop()
-        CheckpointLoop()
-        PylonsLoop()
-    else
+    if RaceData.InCreator then
         QBCore.Functions.Notify(Lang:t('error.alreadymaking'), 'error')
+        return
     end
+
+    CreatorData.RaceName = RaceName
+    RaceData.InCreator = true
+    CreatorUI()
+    CreatorLoop()
+    CheckpointLoop()
+    PylonsLoop()
 end)
 
 RegisterNetEvent('qb-lapraces:client:UpdateRaceRacerData', function(RaceId, aRaceData)
-    if (CurrentRaceData.RaceId ~= nil) and CurrentRaceData.RaceId == RaceId then
-        CurrentRaceData.Racers = aRaceData.Racers
-    end
+    if not CurrentRaceData.RaceId or CurrentRaceData.RaceId ~= RaceId then return end
+
+    CurrentRaceData.Racers = aRaceData.Racers
 end)
 
 RegisterNetEvent('qb-lapraces:client:JoinRace', function(Data, Laps)
-    if not RaceData.InRace then
-        RaceData.InRace = true
-        SetupRace(Data, Laps)
-        TriggerServerEvent('qb-lapraces:server:UpdateRaceState', CurrentRaceData.RaceId, false, true)
-    else
+    if RaceData.InRace then
         QBCore.Functions.Notify(Lang:t('error.alreadyinrace'), 'error')
+        return
     end
+
+    RaceData.InRace = true
+    SetupRace(Data, Laps)
+    TriggerServerEvent('qb-lapraces:server:UpdateRaceState', CurrentRaceData.RaceId, false, true)
 end)
 
-RegisterNetEvent('qb-lapraces:client:LeaveRace', function(_)
+RegisterNetEvent('qb-lapraces:client:LeaveRace', function()
     QBCore.Functions.Notify(Lang:t('primary.LeaveRace'))
-    for k, _ in pairs(CurrentRaceData.Checkpoints) do
-        if CurrentRaceData.Checkpoints[k].blip ~= nil then
-            RemoveBlip(CurrentRaceData.Checkpoints[k].blip)
-            CurrentRaceData.Checkpoints[k].blip = nil
+    for _, v in pairs(CurrentRaceData.Checkpoints) do
+        if v.blip then
+            RemoveBlip(v.blip)
+            v.blip = nil
         end
-        if CurrentRaceData.Checkpoints[k].pileleft ~= nil then
-            local coords = CurrentRaceData.Checkpoints[k].offset.left
+        if v.pileleft then
+            local coords = v.offset.left
             local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
             DeleteObject(Obj)
             ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-            CurrentRaceData.Checkpoints[k].pileleft = nil
+            v.pileleft = nil
         end
-        if CurrentRaceData.Checkpoints[k].pileright ~= nil then
-            local coords = CurrentRaceData.Checkpoints[k].offset.right
+        if v.pileright then
+            local coords = v.offset.right
             local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
             DeleteObject(Obj)
             ClearAreaOfObjects(coords.x, coords.y, coords.z, 50.0, 0)
-            CurrentRaceData.Checkpoints[k].pileright = nil
+            v.pileright = nil
         end
     end
     CurrentRaceData.RaceName = nil
@@ -672,38 +614,35 @@ RegisterNetEvent('qb-lapraces:client:LeaveRace', function(_)
     CurrentRaceData.BestLap = 0
     CurrentRaceData.RaceId = nil
     RaceData.InRace = false
-    FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), false), false)
+    FreezeEntityPosition(cache.vehicle, false)
 end)
 
 RegisterNetEvent('qb-lapraces:client:RaceCountdown', function()
     TriggerServerEvent('qb-lapraces:server:UpdateRaceState', CurrentRaceData.RaceId, true, false)
-    if CurrentRaceData.RaceId ~= nil then
-        while Countdown ~= 0 do
-            if CurrentRaceData.RaceName ~= nil then
-                if Countdown == 10 then
-                    QBCore.Functions.Notify(Lang:t('primary.startinten'), 'primary', 2500)
-                    PlaySound(-1, "slow", "SHORT_PLAYER_SWITCH_SOUND_SET", false, 0, true)
-                elseif Countdown <= 5 then
-                    QBCore.Functions.Notify(Countdown, 'error', 500)
-                    PlaySound(-1, "slow", "SHORT_PLAYER_SWITCH_SOUND_SET", false, 0, true)
-                end
-                Countdown = Countdown - 1
-                FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), true), true)
-            else
-                break
+    if CurrentRaceData.RaceId then
+        while Countdown ~= 0 and CurrentRaceData.RaceName do
+            if Countdown == 10 then
+                QBCore.Functions.Notify(Lang:t('primary.startinten'), 'primary', 2500)
+                PlaySound(-1, "slow", "SHORT_PLAYER_SWITCH_SOUND_SET", false, 0, true)
+            elseif Countdown <= 5 then
+                QBCore.Functions.Notify(Countdown, 'error', 500)
+                PlaySound(-1, "slow", "SHORT_PLAYER_SWITCH_SOUND_SET", false, 0, true)
             end
+            Countdown -= 1
+            FreezeEntityPosition(cache.vehicle, true)
             Wait(1000)
         end
-        if CurrentRaceData.RaceName ~= nil then
-            SetNewWaypoint(CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1].coords.x, CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1].coords.y)
+        if CurrentRaceData.RaceName then
+            local newCheckpoint = CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1]
+            SetNewWaypoint(newCheckpoint.coords.x, newCheckpoint.coords.y)
             QBCore.Functions.Notify(Lang:t('success.start'), 'success', 1000)
-            SetBlipScale(CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1].blip, 1.0)
-            FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), true), false)
+            SetBlipScale(newCheckpoint.blip, 1.0)
+            FreezeEntityPosition(cache.vehicle, false)
             DoPilePfx()
             CurrentRaceData.Started = true
             Countdown = 10
         else
-            FreezeEntityPosition(GetVehiclePedIsIn(PlayerPedId(), true), false)
+            FreezeEntityPosition(cache.vehicle, false)
             Countdown = 10
         end
     else
@@ -712,41 +651,34 @@ RegisterNetEvent('qb-lapraces:client:RaceCountdown', function()
 end)
 
 RegisterNetEvent('qb-lapraces:client:PlayerFinishs', function(RaceId, Place, FinisherData)
-    if CurrentRaceData.RaceId ~= nil then
-        if CurrentRaceData.RaceId == RaceId then
-            QBCore.Functions.Notify(Lang:t('error.playerfinished', {firstname = FinisherData.PlayerData.charinfo.firstname, spot = Place}), 'error', 3500)
-        end
-    end
+    if not CurrentRaceData.RaceId or CurrentRaceData.RaceId ~= RaceId then return end
+
+    QBCore.Functions.Notify(Lang:t('error.playerfinished', {firstname = FinisherData.PlayerData.charinfo.firstname, spot = Place}), 'error', 3500)
 end)
 
 RegisterNetEvent('qb-lapraces:client:WaitingDistanceCheck', function()
     Wait(1000)
     CreateThread(function()
-        while true do
-            if not CurrentRaceData.Started then
-                local ped = PlayerPedId()
-                local pos = GetEntityCoords(ped)
-                if CurrentRaceData.Checkpoints[1] ~= nil then
-                    local cpcoords = CurrentRaceData.Checkpoints[1].coords
-                    local dist = #(pos - vector3(cpcoords.x, cpcoords.y, cpcoords.z))
-                    if dist > 115.0 then
-                        if ToFarCountdown ~= 0 then
-                            ToFarCountdown = ToFarCountdown - 1
-                            QBCore.Functions.Notify(Lang:t('error.gobackorkick', {seconds = ToFarCountdown}), 'error', 500)
-                        else
-                            TriggerServerEvent('qb-lapraces:server:LeaveRace', CurrentRaceData)
-                            ToFarCountdown = 10
-                            break
-                        end
-                        Wait(1000)
+        while not CurrentRaceData.Started do
+            local pos = GetEntityCoords(cache.ped)
+            if CurrentRaceData.Checkpoints[1] then
+                local cpcoords = CurrentRaceData.Checkpoints[1].coords
+                local dist = #(pos - cpcoords)
+                if dist > 115.0 then
+                    if ToFarCountdown ~= 0 then
+                        ToFarCountdown -= 1
+                        QBCore.Functions.Notify(Lang:t('error.gobackorkick', {seconds = ToFarCountdown}), 'error', 500)
                     else
-                        if ToFarCountdown ~= 10 then
-                            ToFarCountdown = 10
-                        end
+                        TriggerServerEvent('qb-lapraces:server:LeaveRace', CurrentRaceData)
+                        ToFarCountdown = 10
+                        break
+                    end
+                    Wait(1000)
+                else
+                    if ToFarCountdown ~= 10 then
+                        ToFarCountdown = 10
                     end
                 end
-            else
-                break
             end
             Wait(0)
         end
@@ -755,42 +687,42 @@ end)
 
 -- Threads
 CreateThread(function()
+    local sleep = 1000
     while true do
+        sleep = 1000
 
-        local ped = PlayerPedId()
+        local ped = cache.ped
         local pos = GetEntityCoords(ped)
 
-        if CurrentRaceData.RaceName ~= nil then
+        if CurrentRaceData.RaceName then
+            sleep = 0
             if CurrentRaceData.Started then
-                local cp
-                if CurrentRaceData.CurrentCheckpoint + 1 > #CurrentRaceData.Checkpoints then
-                    cp = 1
-                else
-                    cp = CurrentRaceData.CurrentCheckpoint + 1
-                end
+                local nextCp = CurrentRaceData.CurrentCheckpoint + 1
+                local cp = nextCp > #CurrentRaceData.Checkpoints and 1 or nextCp
                 local data = CurrentRaceData.Checkpoints[cp]
                 local CheckpointDistance = #(pos - vector3(data.coords.x, data.coords.y, data.coords.z))
                 local MaxDistance = GetMaxDistance(CurrentRaceData.Checkpoints[cp].offset)
 
                 if CheckpointDistance < MaxDistance then
                     if CurrentRaceData.TotalLaps == 0 then
-                        if CurrentRaceData.CurrentCheckpoint + 1 < #CurrentRaceData.Checkpoints then
-                            CurrentRaceData.CurrentCheckpoint = CurrentRaceData.CurrentCheckpoint + 1
-                            SetNewWaypoint(CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1].coords.x, CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1].coords.y)
+                        if nextCp < #CurrentRaceData.Checkpoints then
+                            CurrentRaceData.CurrentCheckpoint = nextCp
+                            local newCheckPoint = CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1]
+                            SetNewWaypoint(newCheckPoint.coords.x, newCheckPoint.coords.y)
                             TriggerServerEvent('qb-lapraces:server:UpdateRacerData', CurrentRaceData.RaceId, CurrentRaceData.CurrentCheckpoint, CurrentRaceData.Lap, false)
                             DoPilePfx()
                             PlaySound(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false, 0, true)
                             SetBlipScale(CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint].blip, 0.6)
-                            SetBlipScale(CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1].blip, 1.0)
+                            SetBlipScale(newCheckPoint.blip, 1.0)
                         else
                             DoPilePfx()
                             PlaySound(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false, 0, true)
-                            CurrentRaceData.CurrentCheckpoint = CurrentRaceData.CurrentCheckpoint + 1
+                            CurrentRaceData.CurrentCheckpoint = nextCp
                             TriggerServerEvent('qb-lapraces:server:UpdateRacerData', CurrentRaceData.RaceId, CurrentRaceData.CurrentCheckpoint, CurrentRaceData.Lap, true)
                             FinishRace()
                         end
                     else
-                        if CurrentRaceData.CurrentCheckpoint + 1 > #CurrentRaceData.Checkpoints then
+                        if nextCp > #CurrentRaceData.Checkpoints then
                             if CurrentRaceData.Lap + 1 > CurrentRaceData.TotalLaps then
                                 DoPilePfx()
                                 PlaySound(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false, 0, true)
@@ -799,7 +731,7 @@ CreateThread(function()
                                 elseif CurrentRaceData.BestLap == 0 then
                                     CurrentRaceData.BestLap = CurrentRaceData.RaceTime
                                 end
-                                CurrentRaceData.CurrentCheckpoint = CurrentRaceData.CurrentCheckpoint + 1
+                                CurrentRaceData.CurrentCheckpoint = nextCp
                                 TriggerServerEvent('qb-lapraces:server:UpdateRacerData', CurrentRaceData.RaceId, CurrentRaceData.CurrentCheckpoint, CurrentRaceData.Lap, true)
                                 FinishRace()
                             else
@@ -813,16 +745,18 @@ CreateThread(function()
                                 CurrentRaceData.RaceTime = 0
                                 CurrentRaceData.Lap = CurrentRaceData.Lap + 1
                                 CurrentRaceData.CurrentCheckpoint = 1
-                                SetNewWaypoint(CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1].coords.x, CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1].coords.y)
+                                local newCheckPoint = CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1]
+                                SetNewWaypoint(newCheckPoint.coords.x, newCheckPoint.coords.y)
                                 TriggerServerEvent('qb-lapraces:server:UpdateRacerData', CurrentRaceData.RaceId, CurrentRaceData.CurrentCheckpoint, CurrentRaceData.Lap, false)
                             end
                         else
-                            CurrentRaceData.CurrentCheckpoint = CurrentRaceData.CurrentCheckpoint + 1
+                            CurrentRaceData.CurrentCheckpoint = nextCp
                             if CurrentRaceData.CurrentCheckpoint ~= #CurrentRaceData.Checkpoints then
-                                SetNewWaypoint(CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1].coords.x, CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1].coords.y)
+                                local newCheckPoint = CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1]
+                                SetNewWaypoint(newCheckPoint.coords.x, newCheckPoint.coords.y)
                                 TriggerServerEvent('qb-lapraces:server:UpdateRacerData', CurrentRaceData.RaceId, CurrentRaceData.CurrentCheckpoint, CurrentRaceData.Lap, false)
                                 SetBlipScale(CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint].blip, 0.6)
-                                SetBlipScale(CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1].blip, 1.0)
+                                SetBlipScale(newCheckPoint.blip, 1.0)
                             else
                                 SetNewWaypoint(CurrentRaceData.Checkpoints[1].coords.x, CurrentRaceData.Checkpoints[1].coords.y)
                                 TriggerServerEvent('qb-lapraces:server:UpdateRacerData', CurrentRaceData.RaceId, CurrentRaceData.CurrentCheckpoint, CurrentRaceData.Lap, false)
@@ -836,26 +770,24 @@ CreateThread(function()
                 end
             else
                 local data = CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint]
-                DrawMarker(4, data.coords.x, data.coords.y, data.coords.z + 1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.9, 1.5, 1.5, 255, 255, 255, 255, false, true, 0, false, 0, 0, 0)
+                DrawMarker(4, data.coords.x, data.coords.y, data.coords.z + 1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.9, 1.5, 1.5, 255, 255, 255, 255, false, true, 0, false, nil, nil, false)
             end
-        else
-            Wait(1000)
         end
 
-        Wait(3)
+        Wait(sleep)
     end
 end)
 
 CreateThread(function()
     while true do
-        local Driver, plyVeh = Info()
-        if Driver then
+        local isDriver, plyVeh = cache.seat == -1, cache.vehicle
+        if isDriver then
             if GetVehicleCurrentGear(plyVeh) < 3 and GetVehicleCurrentRpm(plyVeh) == 1.0 and math.ceil(GetEntitySpeed(plyVeh) * 2.236936) > 50 then
                 while GetVehicleCurrentRpm(plyVeh) > 0.6 do
                     SetVehicleCurrentRpm(plyVeh, 0.3)
                     Wait(1)
                 end
-            Wait(800)
+                Wait(800)
             end
         end
         Wait(500)
