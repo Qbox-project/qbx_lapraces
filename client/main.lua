@@ -123,7 +123,7 @@ local function PylonsLoop()
                 local left = GetOffsetFromEntityInWorldCoords(cache.vehicle, -CreatorData.TireDistance, 0.0, 0.0)
                 local right = GetOffsetFromEntityInWorldCoords(cache.vehicle, -CreatorData.TireDistance, 0.0, 0.0)
                 DrawText3D(Lang:t('general.CheckL'), left.x, left.y, left.z)
-                DrawText3D(Lang:t('general.CheckR')right.x, right.y, right.z)
+                DrawText3D(Lang:t('general.CheckR'), right.x, right.y, right.z)
             end
             Wait(0)
         end
