@@ -30,9 +30,7 @@ files {
     'html/img/*'
 }
 
-modules {
-    'qbx_core:utils'
-}
+modules {'qbx_core:utils'}
 
 provide 'qb-lapraces'
 lua54 'yes'
