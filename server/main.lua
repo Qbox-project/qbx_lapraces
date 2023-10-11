@@ -1,4 +1,3 @@
-local QBCore = exports['qbx-core']:GetCoreObject()
 local Races = {}
 local AvailableRaces = {}
 local LastRaces = {}
@@ -23,8 +22,8 @@ local function IsWhitelisted(citizenId)
             return true
         end
     end
-    local player = QBCore.Functions.GetPlayerByCitizenId(citizenId)
-    local perms = QBCore.Functions.GetPermission(player.PlayerData.source)
+    local player = exports.qbx_core:GetPlayerByCitizenId(citizenId)
+    local perms = exports.qbx_core:GetPermission(player.PlayerData.source)
     return perms == "admin" or perms == "god"
 end
 
@@ -84,7 +83,7 @@ end
 
 RegisterNetEvent('qb-lapraces:server:FinishPlayer', function(RaceData, TotalTime, TotalLaps, BestLap)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local AvailableKey = GetOpenedRaceKey(RaceData.RaceId)
     local PlayersFinished = 0
     local AmountOfRacers = 0
@@ -165,21 +164,21 @@ end)
 
 RegisterNetEvent('qb-lapraces:server:CreateLapRace', function(RaceName)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     if Player and IsWhitelisted(Player.PlayerData.citizenid) then
         if IsNameAvailable(RaceName) then
             TriggerClientEvent('qb-lapraces:client:StartRaceEditor', source, RaceName)
         else
-            TriggerClientEvent('QBCore:Notify', source, Lang:t('error.namealreadyused'), 'error')
+            exports.qbx_core:Notify(source, Lang:t('error.namealreadyused'), 'error')
         end
     else
-        TriggerClientEvent('QBCore:Notify', source, Lang:t('error.notauthorized', {to = Lang:t('general.createraces')}), 'error')
+        exports.qbx_core:Notify(source, Lang:t('error.notauthorized', {to = Lang:t('general.createraces')}), 'error')
     end
 end)
 
 RegisterNetEvent('qb-lapraces:server:JoinRace', function(RaceData)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local RaceId = RaceData.RaceId
     local AvailableKey = GetOpenedRaceKey(RaceId)
     local CurrentRace = GetCurrentRace(Player.PlayerData.citizenid)
@@ -195,7 +194,7 @@ RegisterNetEvent('qb-lapraces:server:JoinRace', function(RaceData)
             Races[CurrentRace].Started = false
             Races[CurrentRace].Waiting = false
             table.remove(AvailableRaces, PreviousRaceKey)
-            TriggerClientEvent('QBCore:Notify', src, Lang:t('error.raceended'), 'error')
+            exports.qbx_core:Notify(src, Lang:t('error.raceended'), 'error')
             TriggerClientEvent('qb-lapraces:client:LeaveRace', src, Races[CurrentRace])
         else
             AvailableRaces[PreviousRaceKey].RaceData = Races[CurrentRace]
@@ -212,7 +211,7 @@ RegisterNetEvent('qb-lapraces:server:JoinRace', function(RaceData)
     AvailableRaces[AvailableKey].RaceData = Races[RaceId]
     TriggerClientEvent('qb-lapraces:client:JoinRace', src, Races[RaceId], AvailableRaces[AvailableKey].Laps)
     TriggerClientEvent('qb-phone:client:UpdateLapraces', -1)
-    local creatorsource = QBCore.Functions.GetPlayerByCitizenId(AvailableRaces[AvailableKey].SetupCitizenId).PlayerData.source
+    local creatorsource = exports.qbx_core:GetPlayerByCitizenId(AvailableRaces[AvailableKey].SetupCitizenId).PlayerData.source
     if creatorsource ~= Player.PlayerData.source then
         TriggerClientEvent('qb-phone:client:RaceNotify', creatorsource, Lang:t('phonenotif.joinedrace', {firstname = string.sub(Player.PlayerData.charinfo.firstname, 1, 1), lastname = Player.PlayerData.charinfo.lastname}))
     end
@@ -220,11 +219,11 @@ end)
 
 RegisterNetEvent('qb-lapraces:server:LeaveRace', function(RaceData)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local RaceName = RaceData.RaceData and RaceData.RaceData.RaceName or RaceData.RaceName
     local RaceId = GetRaceId(RaceName)
     local AvailableKey = GetOpenedRaceKey(RaceData.RaceId)
-    local creatorsource = QBCore.Functions.GetPlayerByCitizenId(AvailableRaces[AvailableKey].SetupCitizenId)?.PlayerData.source
+    local creatorsource = exports.qbx_core:GetPlayerByCitizenId(AvailableRaces[AvailableKey].SetupCitizenId)?.PlayerData.source
     if creatorsource ~= Player.PlayerData.source then
         TriggerClientEvent('qb-phone:client:RaceNotify', creatorsource, Lang:t('phonenotif.LeaveRace', {firstname = string.sub(Player.PlayerData.charinfo.firstname, 1, 1), lastname = Player.PlayerData.charinfo.lastname}))
     end
@@ -277,7 +276,7 @@ RegisterNetEvent('qb-lapraces:server:LeaveRace', function(RaceData)
         Races[RaceId].Started = false
         Races[RaceId].Waiting = false
         table.remove(AvailableRaces, AvailableKey)
-        TriggerClientEvent('QBCore:Notify', src, Lang:t('error.raceended'), 'error')
+        exports.qbx_core:Notify(src, Lang:t('error.raceended'), 'error')
         TriggerClientEvent('qb-lapraces:client:LeaveRace', src, Races[RaceId])
         LastRaces[RaceId] = nil
         NotFinished[RaceId] = nil
@@ -289,7 +288,7 @@ RegisterNetEvent('qb-lapraces:server:LeaveRace', function(RaceData)
 end)
 
 RegisterNetEvent('qb-lapraces:server:SetupRace', function(RaceId, Laps)
-    local Player = QBCore.Functions.GetPlayer(source)
+    local Player = exports.qbx_core:GetPlayer(source)
     if Races[RaceId] then
         if not Races[RaceId].Waiting then
             if not Races[RaceId].Started then
@@ -305,7 +304,7 @@ RegisterNetEvent('qb-lapraces:server:SetupRace', function(RaceId, Laps)
                     if Races[RaceId].Waiting then
                         local AvailableKey = GetOpenedRaceKey(RaceId)
                         for cid in pairs(Races[RaceId].Racers) do
-                            local RacerData = QBCore.Functions.GetPlayerByCitizenId(cid)
+                            local RacerData = exports.qbx_core:GetPlayerByCitizenId(cid)
                             if RacerData then
                                 TriggerClientEvent('qb-lapraces:client:LeaveRace', RacerData.PlayerData.source, Races[RaceId])
                             end
@@ -320,27 +319,27 @@ RegisterNetEvent('qb-lapraces:server:SetupRace', function(RaceId, Laps)
                     end
                 end)
             else
-                TriggerClientEvent('QBCore:Notify', source, Lang:t('error.alreadyrunning'), 'error')
+                exports.qbx_core:Notify(source, Lang:t('error.alreadyrunning'), 'error')
             end
         else
-            TriggerClientEvent('QBCore:Notify', source, Lang:t('error.alreadyrunning'), 'error')
+            exports.qbx_core:Notify(source, Lang:t('error.alreadyrunning'), 'error')
         end
     else
-        TriggerClientEvent('QBCore:Notify', source, Lang:t('error.notexist'), 'error')
+        exports.qbx_core:Notify(source, Lang:t('error.notexist'), 'error')
     end
 end)
 
 RegisterNetEvent('qb-lapraces:server:CancelRace', function(raceId)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(source)
+    local Player = exports.qbx_core:GetPlayer(source)
     local AvailableKey = GetOpenedRaceKey(raceId)
 
-    TriggerClientEvent('QBCore:Notify', src, Lang:t('error.stoppingrace', {RaceId = raceId}), 'error')
+    exports.qbx_core:Notify(src, Lang:t('error.stoppingrace', {RaceId = raceId}), 'error')
 
     if AvailableKey then
         if AvailableRaces[AvailableKey].SetupCitizenId == Player.PlayerData.citizenid then
             for cid in pairs(Races[raceId].Racers) do
-                local RacerData = QBCore.Functions.GetPlayerByCitizenId(cid)
+                local RacerData = exports.qbx_core:GetPlayerByCitizenId(cid)
                 if RacerData then
                     TriggerClientEvent('qb-lapraces:client:LeaveRace', RacerData.PlayerData.source, Races[raceId])
                 end
@@ -355,7 +354,7 @@ RegisterNetEvent('qb-lapraces:server:CancelRace', function(raceId)
             TriggerClientEvent('qb-phone:client:UpdateLapraces', -1)
         end
     else
-        TriggerClientEvent('QBCore:Notify', src, Lang:t('error.racenotopen', {RaceId = raceId}), 'error')
+        exports.qbx_core:Notify(src, Lang:t('error.racenotopen', {RaceId = raceId}), 'error')
     end
 end)
 
@@ -366,7 +365,7 @@ end)
 
 RegisterNetEvent('qb-lapraces:server:UpdateRacerData', function(RaceId, Checkpoint, Lap, Finished)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local CitizenId = Player.PlayerData.citizenid
 
     Races[RaceId].Racers[CitizenId].Checkpoint = Checkpoint
@@ -378,7 +377,7 @@ end)
 
 RegisterNetEvent('qb-lapraces:server:StartRace', function(RaceId)
     local src = source
-    local MyPlayer = QBCore.Functions.GetPlayer(src)
+    local MyPlayer = exports.qbx_core:GetPlayer(src)
     local AvailableKey = GetOpenedRaceKey(RaceId)
 
     if RaceId then
@@ -386,23 +385,23 @@ RegisterNetEvent('qb-lapraces:server:StartRace', function(RaceId)
             AvailableRaces[AvailableKey].RaceData.Started = true
             AvailableRaces[AvailableKey].RaceData.Waiting = false
             for CitizenId in pairs(Races[RaceId].Racers) do
-                local Player = QBCore.Functions.GetPlayerByCitizenId(CitizenId)
+                local Player = exports.qbx_core:GetPlayerByCitizenId(CitizenId)
                 if Player then
                     TriggerClientEvent('qb-lapraces:client:RaceCountdown', Player.PlayerData.source)
                 end
             end
             TriggerClientEvent('qb-phone:client:UpdateLapraces', -1)
         else
-            TriggerClientEvent('QBCore:Notify', src, Lang:t('error.notcreator'), 'error')
+            exports.qbx_core:Notify(src, Lang:t('error.notcreator'), 'error')
         end
     else
-        TriggerClientEvent('QBCore:Notify', src, Lang:t('error.notinarace'), 'error')
+        exports.qbx_core:Notify(src, Lang:t('error.notinarace'), 'error')
     end
 end)
 
 RegisterNetEvent('qb-lapraces:server:SaveRace', function(RaceData)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local RaceId = GenerateRaceId()
     local Checkpoints = {}
     for k, v in pairs(RaceData.Checkpoints) do
@@ -445,11 +444,11 @@ lib.callback.register('qb-lapraces:server:GetRacingData', function(_, RaceId)
 end)
 
 lib.callback.register('qb-lapraces:server:HasCreatedRace', function(source)
-    return HasOpenedRace(QBCore.Functions.GetPlayer(source).PlayerData.citizenid)
+    return HasOpenedRace(exports.qbx_core:GetPlayer(source).PlayerData.citizenid)
 end)
 
 lib.callback.register('qb-lapraces:server:IsAuthorizedToCreateRaces', function(source, TrackName)
-    return IsWhitelisted(QBCore.Functions.GetPlayer(source).PlayerData.citizenid), IsNameAvailable(TrackName)
+    return IsWhitelisted(exports.qbx_core:GetPlayer(source).PlayerData.citizenid), IsNameAvailable(TrackName)
 end)
 
 lib.callback.register('qb-lapraces:server:CanRaceSetup', function(_, cb)
@@ -473,8 +472,8 @@ end)
 
 -- Commands
 
-QBCore.Commands.Add("cancelrace", Lang:t('commands.cancelrace'), {}, false, function(source, args)
-    local Player = QBCore.Functions.GetPlayer(source)
+lib.addCommand('cancelrace', {help = Lang:t('commands.cancelrace')}, function(source, args)
+    local Player = exports.qbx_core:GetPlayer(source)
 
     if IsWhitelisted(Player.PlayerData.citizenid) then
         local RaceName = table.concat(args, " ")
@@ -483,7 +482,7 @@ QBCore.Commands.Add("cancelrace", Lang:t('commands.cancelrace'), {}, false, func
             if Races[RaceId].Started then
                 local AvailableKey = GetOpenedRaceKey(RaceId)
                 for cid in pairs(Races[RaceId].Racers) do
-                    local RacerData = QBCore.Functions.GetPlayerByCitizenId(cid)
+                    local RacerData = exports.qbx_core:GetPlayerByCitizenId(cid)
                     if RacerData then
                         TriggerClientEvent('qb-lapraces:client:LeaveRace', RacerData.PlayerData.source, Races[RaceId])
                     end
@@ -496,25 +495,25 @@ QBCore.Commands.Add("cancelrace", Lang:t('commands.cancelrace'), {}, false, func
                 LastRaces[RaceId] = nil
                 TriggerClientEvent('qb-phone:client:UpdateLapraces', -1)
             else
-                TriggerClientEvent('QBCore:Notify', source, Lang:t('error.notstarted'), 'error')
+                exports.qbx_core:Notify(source, Lang:t('error.notstarted'), 'error')
             end
         end
     else
-        TriggerClientEvent('QBCore:Notify', source, Lang:t('error.notauthorized', {to = Lang:t('general.dothis')}), 'error')
+        exports.qbx_core:Notify(source, Lang:t('error.notauthorized', {to = Lang:t('general.dothis')}), 'error')
     end
 end)
 
-QBCore.Commands.Add("togglesetup", Lang:t('commands.togglesetup'), {}, false, function(source)
-    local Player = QBCore.Functions.GetPlayer(source)
+lib.addCommand('togglesetup', {help = Lang:t('commands.togglesetup')}, function(source)
+    local Player = exports.qbx_core:GetPlayer(source)
     if IsWhitelisted(Player.PlayerData.citizenid) then
         Config.RaceSetupAllowed = not Config.RaceSetupAllowed
         if not Config.RaceSetupAllowed then
-            TriggerClientEvent('QBCore:Notify', source, Lang:t('error.nomoreraces'), 'error')
+            exports.qbx_core:Notify(source, Lang:t('error.nomoreraces'), 'error')
         else
-            TriggerClientEvent('QBCore:Notify', source, Lang:t('success.cancreate'), 'success')
+            exports.qbx_core:Notify(source, Lang:t('success.cancreate'), 'success')
         end
     else
-        TriggerClientEvent('QBCore:Notify', source, Lang:t('error.notauthorized', {to = Lang:t('general.dothis')}), 'error')
+        exports.qbx_core:Notify(source, Lang:t('error.notauthorized', {to = Lang:t('general.dothis')}), 'error')
     end
 end)
 
