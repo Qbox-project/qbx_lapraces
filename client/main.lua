@@ -47,7 +47,7 @@ AddEventHandler('onResourceStop', function(resource)
         end
     end
 
-    for k, v in pairs(CurrentRaceData.Checkpoints) do
+    for _, v in pairs(CurrentRaceData.Checkpoints) do
         if v.pileleft then
             local coords = v.offset.right
             local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
@@ -488,7 +488,7 @@ local function FinishRace()
     else
         exports.qbx_core:Notify(Lang:t('success.finished', {time = SecondsToClock(CurrentRaceData.TotalTime)}))
     end
-    for k, v in pairs(CurrentRaceData.Checkpoints) do
+    for _, v in pairs(CurrentRaceData.Checkpoints) do
         if v.blip then
             RemoveBlip(v.blip)
             v.blip = nil
@@ -671,9 +671,8 @@ end)
 
 -- Threads
 CreateThread(function()
-    local sleep = 1000
     while true do
-        sleep = 1000
+        local sleep = 1000
 
         local ped = cache.ped
         local pos = GetEntityCoords(ped)
