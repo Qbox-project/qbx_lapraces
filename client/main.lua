@@ -47,7 +47,7 @@ AddEventHandler('onResourceStop', function(resource)
         end
     end
 
-    for k, v in pairs(CurrentRaceData.Checkpoints) do
+    for _, v in pairs(CurrentRaceData.Checkpoints) do
         if v.pileleft then
             local coords = v.offset.right
             local Obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 5.0, `prop_offroad_tyres02`, false, false, false)
@@ -122,8 +122,8 @@ local function PylonsLoop()
             if cache.vehicle then
                 local left = GetOffsetFromEntityInWorldCoords(cache.vehicle, -CreatorData.TireDistance, 0.0, 0.0)
                 local right = GetOffsetFromEntityInWorldCoords(cache.vehicle, -CreatorData.TireDistance, 0.0, 0.0)
-                DrawText3D(Lang:t('general.CheckL'), left.x, left.y, left.z)
-                DrawText3D(Lang:t('general.CheckR'), right.x, right.y, right.z)
+                qbx.drawText3d({text = Lang:t('general.CheckL'), coords = vec3(left.x, left.y, left.z)})
+                qbx.drawText3d({text = Lang:t('general.CheckR'), coords = vec3(right.x, right.y, right.z)})
             end
             Wait(0)
         end
@@ -309,7 +309,7 @@ local function CreatorLoop()
                 end
             else
                 local coords = GetEntityCoords(cache.ped)
-                DrawText3D(Lang:t('error.mustbeinveh'), coords.x, coords.y, coords.z)
+                qbx.drawText3d({text = Lang:t('error.mustbeinveh'), coords = vec3(coords.x, coords.y, coords.z)})
             end
 
             if IsControlJustPressed(0, 163) or IsDisabledControlJustPressed(0, 163) then
@@ -488,7 +488,7 @@ local function FinishRace()
     else
         exports.qbx_core:Notify(Lang:t('success.finished', {time = SecondsToClock(CurrentRaceData.TotalTime)}))
     end
-    for k, v in pairs(CurrentRaceData.Checkpoints) do
+    for _, v in pairs(CurrentRaceData.Checkpoints) do
         if v.blip then
             RemoveBlip(v.blip)
             v.blip = nil
@@ -671,9 +671,8 @@ end)
 
 -- Threads
 CreateThread(function()
-    local sleep = 1000
     while true do
-        sleep = 1000
+        local sleep = 1000
 
         local ped = cache.ped
         local pos = GetEntityCoords(ped)
