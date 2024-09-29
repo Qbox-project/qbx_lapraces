@@ -24,7 +24,8 @@ files {
     'html/*.html',
     'html/*.css',
     'html/*.js',
-    'html/img/*'
+    'html/img/*',
+    'locales/*.json'
 }
 
 ox_lib 'locale'
