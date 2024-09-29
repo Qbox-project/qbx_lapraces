@@ -122,8 +122,8 @@ local function PylonsLoop()
             if cache.vehicle then
                 local left = GetOffsetFromEntityInWorldCoords(cache.vehicle, -CreatorData.TireDistance, 0.0, 0.0)
                 local right = GetOffsetFromEntityInWorldCoords(cache.vehicle, -CreatorData.TireDistance, 0.0, 0.0)
-                qbx.drawText3d({text = Lang:t('general.CheckL'), coords = vec3(left.x, left.y, left.z)})
-                qbx.drawText3d({text = Lang:t('general.CheckR'), coords = vec3(right.x, right.y, right.z)})
+                qbx.drawText3d({text = locale('general.CheckL'), coords = vec3(left.x, left.y, left.z)})
+                qbx.drawText3d({text = locale('general.CheckR'), coords = vec3(right.x, right.y, right.z)})
             end
             Wait(0)
         end
@@ -187,10 +187,10 @@ local function DeleteCheckpoint()
             end
             CreatorData.Checkpoints = NewCheckpoints
         else
-            exports.qbx_core:Notify(Lang:t('error.toofast'), 'error')
+            exports.qbx_core:Notify(locale('error.toofast'), 'error')
         end
     else
-        exports.qbx_core:Notify(Lang:t('error.toofast'), 'error')
+        exports.qbx_core:Notify(locale('error.toofast'), 'error')
     end
 end
 
@@ -208,7 +208,7 @@ local function SaveRace()
 
     TriggerServerEvent('qb-lapraces:server:SaveRace', CreatorData)
 
-    exports.qbx_core:Notify(Lang:t('success.savedrace', {racename = CreatorData.RaceName}), 'success')
+    exports.qbx_core:Notify(locale('success.savedrace', CreatorData.RaceName), 'success')
 
     for _, v in pairs(CreatorData.Checkpoints) do
         if v.blip then
@@ -280,7 +280,7 @@ local function CreatorLoop()
                     if CreatorData.Checkpoints and table.type(CreatorData.Checkpoints) ~= 'empty' then
                         DeleteCheckpoint()
                     else
-                        exports.qbx_core:Notify(Lang:t('error.nocheckpoints'), 'error')
+                        exports.qbx_core:Notify(locale('error.nocheckpoints'), 'error')
                     end
                 end
 
@@ -288,7 +288,7 @@ local function CreatorLoop()
                     if CreatorData.Checkpoints and #CreatorData.Checkpoints >= 2 then
                         SaveRace()
                     else
-                        exports.qbx_core:Notify(Lang:t('error.atleast10checkp'), 'error')
+                        exports.qbx_core:Notify(locale('error.atleast10checkp'), 'error')
                     end
                 end
 
@@ -296,7 +296,7 @@ local function CreatorLoop()
                     if CreatorData.TireDistance + 1.0 ~= 16.0 then
                         CreatorData.TireDistance = CreatorData.TireDistance + 1.0
                     else
-                        exports.qbx_core:Notify(Lang:t('error.higherthan15'), 'error')
+                        exports.qbx_core:Notify(locale('error.higherthan15'), 'error')
                     end
                 end
 
@@ -304,18 +304,18 @@ local function CreatorLoop()
                     if CreatorData.TireDistance - 1.0 ~= 1.0 then
                         CreatorData.TireDistance = CreatorData.TireDistance - 1.0
                     else
-                        exports.qbx_core:Notify(Lang:t('error.lowerthan2'), 'error')
+                        exports.qbx_core:Notify(locale('error.lowerthan2'), 'error')
                     end
                 end
             else
                 local coords = GetEntityCoords(cache.ped)
-                qbx.drawText3d({text = Lang:t('error.mustbeinveh'), coords = vec3(coords.x, coords.y, coords.z)})
+                qbx.drawText3d({text = locale('error.mustbeinveh'), coords = vec3(coords.x, coords.y, coords.z)})
             end
 
             if IsControlJustPressed(0, 163) or IsDisabledControlJustPressed(0, 163) then
                 if not CreatorData.ConfirmDelete then
                     CreatorData.ConfirmDelete = true
-                    exports.qbx_core:Notify(Lang:t('error.pressagain'), 'error', 5000)
+                    exports.qbx_core:Notify(locale('error.pressagain'), 'error', 5000)
                 else
                     for _, checkpointData in pairs(CreatorData.Checkpoints) do
                         if checkpointData.blip then
@@ -344,7 +344,7 @@ local function CreatorLoop()
                     RaceData.InCreator = false
                     CreatorData.RaceName = nil
                     CreatorData.Checkpoints = {}
-                    exports.qbx_core:Notify(Lang:t('error.editorcancelled'), 'error')
+                    exports.qbx_core:Notify(locale('error.editorcancelled'), 'error')
                     CreatorData.ConfirmDelete = false
                 end
             end
@@ -484,9 +484,9 @@ end
 local function FinishRace()
     TriggerServerEvent('qb-lapraces:server:FinishPlayer', CurrentRaceData, CurrentRaceData.TotalTime, CurrentRaceData.TotalLaps, CurrentRaceData.BestLap)
     if CurrentRaceData.BestLap ~= 0 then
-        exports.qbx_core:Notify(Lang:t('success.finishedbest', {time = SecondsToClock(CurrentRaceData.TotalTime), best = SecondsToClock(CurrentRaceData.BestLap)}))
+        exports.qbx_core:Notify(locale('success.finishedbest', SecondsToClock(CurrentRaceData.TotalTime), SecondsToClock(CurrentRaceData.BestLap)))
     else
-        exports.qbx_core:Notify(Lang:t('success.finished', {time = SecondsToClock(CurrentRaceData.TotalTime)}))
+        exports.qbx_core:Notify(locale('success.finished', SecondsToClock(CurrentRaceData.TotalTime)))
     end
     for _, v in pairs(CurrentRaceData.Checkpoints) do
         if v.blip then
@@ -536,7 +536,7 @@ exports('IsInRace', IsInRace)
 
 RegisterNetEvent('qb-lapraces:client:StartRaceEditor', function(RaceName)
     if RaceData.InCreator then
-        exports.qbx_core:Notify(Lang:t('error.alreadymaking'), 'error')
+        exports.qbx_core:Notify(locale('error.alreadymaking'), 'error')
         return
     end
 
@@ -556,7 +556,7 @@ end)
 
 RegisterNetEvent('qb-lapraces:client:JoinRace', function(Data, Laps)
     if RaceData.InRace then
-        exports.qbx_core:Notify(Lang:t('error.alreadyinrace'), 'error')
+        exports.qbx_core:Notify(locale('error.alreadyinrace'), 'error')
         return
     end
 
@@ -566,7 +566,7 @@ RegisterNetEvent('qb-lapraces:client:JoinRace', function(Data, Laps)
 end)
 
 RegisterNetEvent('qb-lapraces:client:LeaveRace', function()
-    exports.qbx_core:Notify(Lang:t('primary.LeaveRace'))
+    exports.qbx_core:Notify(locale('primary.LeaveRace'))
     for _, v in pairs(CurrentRaceData.Checkpoints) do
         if v.blip then
             RemoveBlip(v.blip)
@@ -606,7 +606,7 @@ RegisterNetEvent('qb-lapraces:client:RaceCountdown', function()
     if CurrentRaceData.RaceId then
         while Countdown ~= 0 and CurrentRaceData.RaceName do
             if Countdown == 10 then
-                exports.qbx_core:Notify(Lang:t('primary.startinten'), 'primary', 2500)
+                exports.qbx_core:Notify(locale('primary.startinten'), 'primary', 2500)
                 PlaySound(-1, "slow", "SHORT_PLAYER_SWITCH_SOUND_SET", false, 0, true)
             elseif Countdown <= 5 then
                 exports.qbx_core:Notify(Countdown, 'error', 500)
@@ -619,7 +619,7 @@ RegisterNetEvent('qb-lapraces:client:RaceCountdown', function()
         if CurrentRaceData.RaceName then
             local newCheckpoint = CurrentRaceData.Checkpoints[CurrentRaceData.CurrentCheckpoint + 1]
             SetNewWaypoint(newCheckpoint.coords.x, newCheckpoint.coords.y)
-            exports.qbx_core:Notify(Lang:t('success.start'), 'success', 1000)
+            exports.qbx_core:Notify(locale('success.start'), 'success', 1000)
             SetBlipScale(newCheckpoint.blip, 1.0)
             FreezeEntityPosition(cache.vehicle, false)
             DoPilePfx()
@@ -630,14 +630,14 @@ RegisterNetEvent('qb-lapraces:client:RaceCountdown', function()
             Countdown = 10
         end
     else
-        exports.qbx_core:Notify(Lang:t('error.notinarace'), 'error')
+        exports.qbx_core:Notify(locale('error.notinarace'), 'error')
     end
 end)
 
 RegisterNetEvent('qb-lapraces:client:PlayerFinishs', function(RaceId, Place, FinisherData)
     if not CurrentRaceData.RaceId or CurrentRaceData.RaceId ~= RaceId then return end
 
-    exports.qbx_core:Notify(Lang:t('error.playerfinished', {firstname = FinisherData.PlayerData.charinfo.firstname, spot = Place}), 'error', 3500)
+    exports.qbx_core:Notify(locale('error.playerfinished', FinisherData.PlayerData.charinfo.firstname, Place), 'error', 3500)
 end)
 
 RegisterNetEvent('qb-lapraces:client:WaitingDistanceCheck', function()
@@ -651,7 +651,7 @@ RegisterNetEvent('qb-lapraces:client:WaitingDistanceCheck', function()
                 if dist > 115.0 then
                     if ToFarCountdown ~= 0 then
                         ToFarCountdown -= 1
-                        exports.qbx_core:Notify(Lang:t('error.gobackorkick', {seconds = ToFarCountdown}), 'error', 500)
+                        exports.qbx_core:Notify(locale('error.gobackorkick', {seconds = ToFarCountdown}), 'error', 500)
                     else
                         TriggerServerEvent('qb-lapraces:server:LeaveRace', CurrentRaceData)
                         ToFarCountdown = 10

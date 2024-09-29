@@ -8,9 +8,6 @@ version '1.0.0'
 shared_scripts {
     '@ox_lib/init.lua',
     '@qbx_core/modules/lib.lua',
-    '@qbx_core/shared/locale.lua',
-    'locales/en.lua',
-    'locales/*.lua',
     'config.lua',
 }
 
@@ -29,6 +26,8 @@ files {
     'html/*.js',
     'html/img/*'
 }
+
+ox_lib 'locale'
 
 provide 'qb-lapraces'
 lua54 'yes'
