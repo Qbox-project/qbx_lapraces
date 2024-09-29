@@ -1,0 +1,57 @@
+{
+    "error": {
+      "toofast": "Nemůžeš jet příliš rychle",
+      "nocheckpoints": "Zatím jsi neumístil(a) žádné kontrolní body..",
+      "atleast10checkp": "Musíš mít alespoň 10 kontrolních bodů",
+      "higherthan15": "Nemůžeš jít výše než 15",
+      "lowerthan2": "Nemůžeš jít níže než 2",
+      "mustbeinveh": "Musíš být v vozidle",
+      "pressagain": "Stiskněte [9] znovu pro potvrzení",
+      "editorcancelled": "Editor závodu zrušen!",
+      "alreadymaking": "Již vytváříš závod.",
+      "alreadyinrace": "Již jsi v závodě..",
+      "notinarace": "Nejsi v závodě..",
+      "playerfinished": "%s dokončil(a): %s místo",
+      "gobackorkick": "Vrať se zpět na start nebo budeš vyhozen(a) ze závodu: %ss",
+      "namealreadyused": "Již existuje závod s tímto názvem.",
+      "notauthorized": "Nemáš oprávnění k provedení akce: %s.",
+      "raceended": "Byl jsi jediný(á) v závodě, závod skončil",
+      "alreadyrunning": "Závod již probíhá",
+      "notexist": "Tento závod neexistuje :(",
+      "stoppingrace": "Zastavuji závod: %s",
+      "racenotopen": "Závod není otevřen: %s",
+      "notcreator": "Nejsi tvůrcem závodu..",
+      "notstarted": "Tento závod ještě nezačal.",
+      "nomoreraces": "Nelze vytvářet více závodů!"
+    },
+    "success": {
+      "savedrace": "Závod: %s uložen!",
+      "finishedbest": "Závod dokončen za %s, s nejlepším kolem: %s",
+      "finished": "Závod dokončen za: %s",
+      "start": "START!",
+      "cancreate": "Závody mohou být znovu vytvořeny!"
+    },
+    "primary": {
+      "LeaveRace": "Dokončil(a) jsi závod!",
+      "startinten": "Závod začne za 10 sekund"
+    },
+    "general": {
+      "CheckL": "Kontrolní bod L",
+      "CheckR": "Kontrolní bod R",
+      "DNF": "DNF",
+      "unknown": "Neznámý",
+      "dothis": "udělat to",
+      "createraces": " vytvářet závody"
+    },
+    "phonenotif": {
+      "wonWR": "Vyhrál(a) jsi WR z %s odpojeno s časem: %s!",
+      "wonWR2": "Vyhrál(a) jsi WR z %s položeno s časem: %s!",
+      "joinedrace": "%s. %s se připojil(a) do závodu!",
+      "LeaveRace": "%s. %s se odhlásil(a) ze závodu!"
+    },
+    "commands": {
+      "cancelrace": "Zrušit probíhající závod..",
+      "togglesetup": "Zapnout / vypnout nastavení závodu"
+    }
+  }
+  

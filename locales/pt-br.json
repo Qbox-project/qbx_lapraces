@@ -1,0 +1,56 @@
+{
+    "error": {
+        "toofast": "Você não pode ir rápido demais",
+        "nocheckpoints": "Você ainda não colocou nenhum checkpoint..",
+        "atleast10checkp": "Você deve ter pelo menos 10 checkpoints",
+        "higherthan15": "Você não pode ir além de 15",
+        "lowerthan2": "Você não pode ir abaixo de 2",
+        "mustbeinveh": "Você deve estar em um veículo",
+        "pressagain": "Pressione [9] novamente para confirmar",
+        "editorcancelled": "Editor de corrida cancelado!",
+        "alreadymaking": "Você já está criando uma corrida.",
+        "alreadyinrace": "Você já está em uma corrida..",
+        "notinarace": "Você não está em uma corrida..",
+        "playerfinished": "%s terminou: %sº",
+        "gobackorkick": "Volte ao início ou você será removido da corrida: %ss",
+        "namealreadyused": "Já existe uma corrida com esse nome.",
+        "notauthorized": "Você não foi autorizado a %s.",
+        "raceended": "Você era o único na corrida, a corrida terminou",
+        "alreadyrunning": "A corrida já está em andamento",
+        "notexist": "Esta corrida não existe :(",
+        "stoppingrace": "Parando a corrida: %s",
+        "racenotopen": "Corrida não está aberta: %s",
+        "notcreator": "Você não é o criador da corrida..",
+        "notstarted": "Esta corrida ainda não começou.",
+        "nomoreraces": "Não é possível criar mais corridas!"
+    },
+    "success": {
+        "savedrace": "Corrida: %s foi salva!",
+        "finishedbest": "Corrida finalizada em %s, com a melhor volta: %s",
+        "finished": "Corrida finalizada em: %s",
+        "start": "VAI!",
+        "cancreate": "Corridas podem ser criadas novamente!"
+    },
+    "primary": {
+        "LeaveRace": "Você completou a corrida!",
+        "startinten": "A corrida começará em 10 segundos"
+    },
+    "general": {
+        "CheckL": "Checkpoint L",
+        "CheckR": "Checkpoint R",
+        "DNF": "DNF",
+        "unknown": "Desconhecido",
+        "dothis": "faça isso",
+        "createraces": " criar corridas"
+    },
+    "phonenotif": {
+        "wonWR": "Você conquistou o WR de %s desconectado com o tempo de: %s!",
+        "wonWR2": "Você conquistou o WR de %s com o tempo de: %s!",
+        "joinedrace": "%s. %s entrou na corrida!",
+        "LeaveRace": "%s. %s deixou a corrida!"
+    },
+    "commands": {
+        "cancelrace": "Cancelar corrida em andamento..",
+        "togglesetup": "Ativar / desativar configuração de corrida"
+    }
+}
