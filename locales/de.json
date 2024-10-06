@@ -1,0 +1,56 @@
+{
+    "error": {
+        "toofast": "Du kannst nicht zu schnell fahren",
+        "nocheckpoints": "Du hast noch keine Checkpoints platziert.",
+        "atleast10checkp": "Du musst mindestens 10 Checkpoints haben",
+        "higherthan15": "Du kannst nicht höher als 15 gehen",
+        "lowerthan2": "Du kannst nicht niedriger als 2 gehen",
+        "mustbeinveh": "Du musst in einem Fahrzeug sein",
+        "pressagain": "Drücke [9] erneut, um zu bestätigen",
+        "editorcancelled": "Renn-Editor abgebrochen!",
+        "alreadymaking": "Du erstellst bereits ein Rennen.",
+        "alreadyinrace": "Du bist bereits in einem Rennen.",
+        "notinarace": "Du bist nicht in einem Rennen.",
+        "playerfinished": "%s hat das Rennen beendet: %ster Platz",
+        "gobackorkick": "Geh zurück zum Start oder du wirst aus dem Rennen geworfen: %ss",
+        "namealreadyused": "Es gibt bereits ein Rennen mit diesem Namen.",
+        "notauthorized": "Du bist nicht autorisiert für %{to}.",
+        "raceended": "Du warst der einzige im Rennen, das Rennen wurde beendet",
+        "alreadyrunning": "Das Rennen läuft bereits",
+        "notexist": "Dieses Rennen existiert nicht :(",
+        "stoppingrace": "Rennen wird gestoppt: %s",
+        "racenotopen": "Rennen nicht geöffnet: %s",
+        "notcreator": "Du bist nicht der Ersteller des Rennens.",
+        "notstarted": "Dieses Rennen hat noch nicht begonnen.",
+        "nomoreraces": "Es können keine weiteren Rennen erstellt werden!"
+    },
+    "success": {
+        "savedrace": "Rennen: %s wurde gespeichert!",
+        "finishedbest": "Rennen in %s beendet, mit der besten Runde: %s",
+        "finished": "Rennen beendet in: %s",
+        "start": "LOS!",
+        "cancreate": "Rennen können wieder erstellt werden!"
+    },
+    "primary": {
+        "LeaveRace": "Du hast das Rennen abgeschlossen!",
+        "startinten": "Das Rennen beginnt in 10 Sekunden"
+    },
+    "general": {
+        "CheckL": "Checkpoint L",
+        "CheckR": "Checkpoint R",
+        "DNF": "DNF",
+        "unknown": "Unbekannt",
+        "dothis": "mach das",
+        "createraces": " Rennen erstellen"
+    },
+    "phonenotif": {
+        "wonWR": "Du hast den WR von %s mit einer Zeit von %s gewonnen!",
+        "wonWR2": "Du hast den WR von %s mit einer Zeit von %s geschlagen!",
+        "joinedrace": "%s. %s ist dem Rennen beigetreten!",
+        "LeaveRace": "%s. %s hat das Rennen verlassen!"
+    },
+    "commands": {
+        "cancelrace": "Laufendes Rennen abbrechen.",
+        "togglesetup": "Renn-Setup ein- / ausschalten"
+    }
+}
