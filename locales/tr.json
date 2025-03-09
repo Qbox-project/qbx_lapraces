@@ -1,0 +1,56 @@
+{
+  "error": {
+    "toofast": "Çok hızlı gidemessin",
+    "nocheckpoints": "Henüz hiç kontrol noktası yerleştirmedin..",
+    "atleast10checkp": "En az 10 kontrol noktası olmalı",
+    "higherthan15": "15'ten yüksek olamazsın",
+    "lowerthan2": "2'den düşük olamazsın",
+    "mustbeinveh": "Bir araçta olmalısın",
+    "pressagain": "[9]'a tekrar basarak onaylayın",
+    "editorcancelled": "Yarış düzenleyici iptal edildi!",
+    "alreadymaking": "Zaten bir yarış oluşturuyorsun.",
+    "alreadyinrace": "Zaten yarışta bulunuyorsun..",
+    "notinarace": "Yarışta değilsin..",
+    "playerfinished": "%s tamamladı: %sth",
+    "gobackorkick": "Başlangıca geri dön, yoksa yarıştan atılacaksın: %ss",
+    "namealreadyused": "Bu isimde zaten bir yarış var.",
+    "notauthorized": "%{to} yetkisine sahip değilsin.",
+    "raceended": "Yarışta tek sen vardın, yarış sona erdi",
+    "alreadyrunning": "Yarış zaten başladı",
+    "notexist": "Bu yarış mevcut değil :(",
+    "stoppingrace": "Yarış durduruluyor: %s",
+    "racenotopen": "Yarış açık değil: %s",
+    "notcreator": "Yarışın yaratıcısı değilsin..",
+    "notstarted": "Bu yarış henüz başlamadı.",
+    "nomoreraces": "Artık yarış oluşturulamaz!"
+  },
+  "success": {
+    "savedrace": "Yarış: %s kaydedildi!",
+    "finishedbest": "Yarış %s sürede tamamlandı, en iyi tur: %s",
+    "finished": "Yarış %s sürede tamamlandı",
+    "start": "BAŞLA!",
+    "cancreate": "Yarışlar yeniden oluşturulabilir!"
+  },
+  "primary": {
+    "LeaveRace": "Yarışı tamamladın!",
+    "startinten": "Yarış 10 saniye içinde başlayacak"
+  },
+  "general": {
+    "CheckL": "Kontrol Noktası L",
+    "CheckR": "Kontrol Noktası R",
+    "DNF": "DNF",
+    "unknown": "Bilinmeyen",
+    "dothis": "bunu yap",
+    "createraces": " yarış oluştur"
+  },
+  "phonenotif": {
+    "wonWR": "%s'nin bağlantısı kesildi, rekorunu %s sürede kırdın!",
+    "wonWR2": "%s yarıştan çekildi, rekorunu %s sürede kırdın!",
+    "joinedrace": "%s. %s yarışa katıldı!",
+    "LeaveRace": "%s. %s yarıştan ayrıldı!"
+  },
+  "commands": {
+    "cancelrace": "Devam eden yarışı iptal et..",
+    "togglesetup": "Yarış ayarını aç/kapat"
+  }
+}
