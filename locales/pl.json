@@ -1,0 +1,56 @@
+{
+    "error": {
+        "toofast": "Nie możesz jechać zbyt szybko",
+        "nocheckpoints": "Nie umieściłeś jeszcze żadnych checkpointów..",
+        "atleast10checkp": "Musisz mieć co najmniej 10 checkpointów",
+        "higherthan15": "Nie możesz przekroczyć wartości 15",
+        "lowerthan2": "Wartość nie może być niższa niż 2",
+        "mustbeinveh": "Musisz być w pojeździe",
+        "pressagain": "Naciśnij [9] ponownie aby potwierdzić",
+        "editorcancelled": "Anulowano edytor wyścigu!",
+        "alreadymaking": "Już tworzysz wyścig.",
+        "alreadyinrace": "Już bierzesz udział w wyścigu..",
+        "notinarace": "Nie jesteś w wyścigu..",
+        "playerfinished": "%s ukończył wyścig na %s miejscu",
+        "gobackorkick": "Wróć na start albo zostaniesz wyrzucony z wyścigu: %ss",
+        "namealreadyused": "Wyścig o tej nazwie już istnieje.",
+        "notauthorized": "Nie masz uprawnień do %{to}.",
+        "raceended": "Byłeś jedynym uczestnikiem, wyścig został zakończony",
+        "alreadyrunning": "Wyścig już trwa",
+        "notexist": "Ten wyścig nie istnieje :(",
+        "stoppingrace": "Zatrzymywanie wyścigu: %s",
+        "racenotopen": "Wyścig nie jest otwarty: %s",
+        "notcreator": "Nie jesteś twórcą tego wyścigu..",
+        "notstarted": "Ten wyścig jeszcze się nie rozpoczął.",
+        "nomoreraces": "Osiągnięto limit tworzenia wyścigów!"
+    },
+    "success": {
+        "savedrace": "Wyścig: %s został zapisany!",
+        "finishedbest": "Wyścig ukończony w czasie %s, z najlepszym okrążeniem: %s",
+        "finished": "Wyścig ukończony w czasie: %s",
+        "start": "START!",
+        "cancreate": "Można ponownie tworzyć wyścigi!"
+    },
+    "primary": {
+        "LeaveRace": "Ukończono wyścig!",
+        "startinten": "Wyścig rozpocznie się za 10 sekund"
+    },
+    "general": {
+        "CheckL": "Checkpoint L",
+        "CheckR": "Checkpoint R",
+        "DNF": "DNF (Nie ukończył)",
+        "unknown": "Nieznany",
+        "dothis": "wykonania tej czynności",
+        "createraces": "tworzenia wyścigów"
+    },
+    "phonenotif": {
+        "wonWR": "Pobito rekord świata %s z czasem: %s!",
+        "wonWR2": "Pobito rekord świata %s ustanawiając czas: %s!",
+        "joinedrace": "%s. %s dołączył do wyścigu!",
+        "LeaveRace": "%s. %s opuścił wyścig!"
+    },
+    "commands": {
+        "cancelrace": "Anuluj trwający wyścig..",
+        "togglesetup": "Włącz/Wyłącz ustawienia wyścigowe"
+    }
+}
