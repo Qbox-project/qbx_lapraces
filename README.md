@@ -1,2 +1,2 @@
-# qb-lapraces
-Race Track Creation For QB-Core
+# qbx-lapraces
+Race Track Creation For QBOX
