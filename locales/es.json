@@ -1,0 +1,56 @@
+{
+    "error": {
+        "toofast": "No puedes ir tan rápido",
+        "nocheckpoints": "Aún no has colocado ningún checkpoint..",
+        "atleast10checkp": "Debes tener al menos 10 checkpoints",
+        "higherthan15": "No puedes superar 15",
+        "lowerthan2": "No puedes bajar de 2",
+        "mustbeinveh": "Debes estar en un vehículo",
+        "pressagain": "Pulsa [9] de nuevo para confirmar",
+        "editorcancelled": "¡Editor de carreras cancelado!",
+        "alreadymaking": "Ya estás creando una carrera.",
+        "alreadyinrace": "Ya estás en una carrera..",
+        "notinarace": "No estás en una carrera..",
+        "playerfinished": "%s terminó: %sº",
+        "gobackorkick": "Vuelve al inicio o serás expulsado de la carrera: %ss",
+        "namealreadyused": "Ya existe una carrera con ese nombre.",
+        "notauthorized": "No estás autorizado para %{to}.",
+        "raceended": "Eras el único en la carrera; la carrera ha terminado",
+        "alreadyrunning": "La carrera ya está en curso",
+        "notexist": "Esta carrera no existe :(",
+        "stoppingrace": "Deteniendo la carrera: %s",
+        "racenotopen": "La carrera no está abierta: %s",
+        "notcreator": "No eres el creador de la carrera..",
+        "notstarted": "Esta carrera aún no ha comenzado.",
+        "nomoreraces": "¡No se pueden crear más carreras!"
+    },
+    "success": {
+        "savedrace": "¡Carrera: %s guardada!",
+        "finishedbest": "Carrera terminada en %s, con la mejor vuelta: %s",
+        "finished": "Carrera terminada en: %s",
+        "start": "¡YA!",
+        "cancreate": "¡Se pueden crear carreras de nuevo!"
+    },
+    "primary": {
+        "LeaveRace": "¡Has completado la carrera!",
+        "startinten": "La carrera comenzará en 10 segundos"
+    },
+    "general": {
+        "CheckL": "Checkpoint L",
+        "CheckR": "Checkpoint R",
+        "DNF": "No terminó",
+        "unknown": "Desconocido",
+        "dothis": "haz esto",
+        "createraces": " crear carreras"
+    },
+    "phonenotif": {
+        "wonWR": "¡Has batido el WR de %s desconectado con un tiempo de: %s!",
+        "wonWR2": "¡Has batido el WR de %s registrado con un tiempo de: %s!",
+        "joinedrace": "%s. ¡%s se ha unido a la carrera!",
+        "LeaveRace": "%s. ¡%s ha abandonado la carrera!"
+    },
+    "commands": {
+        "cancelrace": "Cancelar carrera en curso..",
+        "togglesetup": "Activar / desactivar configuración de carreras"
+    }
+}
