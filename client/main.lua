@@ -394,7 +394,7 @@ local function RaceUI()
                 end
                 break
             end
-            Wait(0)
+            Wait(CurrentRaceData.Started and 1000 or 200)
         end
     end)
 end
@@ -482,7 +482,7 @@ local function SecondsToClock(seconds)
 end
 
 local function FinishRace()
-    TriggerServerEvent('qb-lapraces:server:FinishPlayer', CurrentRaceData, CurrentRaceData.TotalTime, CurrentRaceData.TotalLaps, CurrentRaceData.BestLap)
+    TriggerServerEvent('qb-lapraces:server:FinishPlayer', CurrentRaceData.RaceId)
     if CurrentRaceData.BestLap ~= 0 then
         exports.qbx_core:Notify(locale('success.finishedbest', SecondsToClock(CurrentRaceData.TotalTime), SecondsToClock(CurrentRaceData.BestLap)))
     else
@@ -562,7 +562,6 @@ RegisterNetEvent('qb-lapraces:client:JoinRace', function(Data, Laps)
 
     RaceData.InRace = true
     SetupRace(Data, Laps)
-    TriggerServerEvent('qb-lapraces:server:UpdateRaceState', CurrentRaceData.RaceId, false, true)
 end)
 
 RegisterNetEvent('qb-lapraces:client:LeaveRace', function()
@@ -602,7 +601,6 @@ RegisterNetEvent('qb-lapraces:client:LeaveRace', function()
 end)
 
 RegisterNetEvent('qb-lapraces:client:RaceCountdown', function()
-    TriggerServerEvent('qb-lapraces:server:UpdateRaceState', CurrentRaceData.RaceId, true, false)
     if CurrentRaceData.RaceId then
         while Countdown ~= 0 and CurrentRaceData.RaceName do
             if Countdown == 10 then
@@ -653,7 +651,7 @@ RegisterNetEvent('qb-lapraces:client:WaitingDistanceCheck', function()
                         ToFarCountdown -= 1
                         exports.qbx_core:Notify(locale('error.gobackorkick', {seconds = ToFarCountdown}), 'error', 500)
                     else
-                        TriggerServerEvent('qb-lapraces:server:LeaveRace', CurrentRaceData)
+                        TriggerServerEvent('qb-lapraces:server:LeaveRace')
                         ToFarCountdown = 10
                         break
                     end
