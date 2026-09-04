@@ -1,0 +1,56 @@
+{
+    "error": {
+        "toofast": "Je kunt niet te snel gaan",
+        "nocheckpoints": "Je hebt nog geen controlepunten geplaatst..",
+        "atleast10checkp": "Je moet minimaal 10 controlepunten hebben",
+        "higherthan15": "Je kunt niet hoger gaan dan 15",
+        "lowerthan2": "Lager dan 2 kun je niet gaan",
+        "mustbeinveh": "Je moet in een voertuig zitten",
+        "pressagain": "Druk nogmaals op [9] om te bevestigen",
+        "editorcancelled": "Race-editor geannuleerd!",
+        "alreadymaking": "Je bent al een race aan het maken.",
+        "alreadyinrace": "Je doet al mee aan een race..",
+        "notinarace": "Je doet niet mee aan een race..",
+        "playerfinished": "%safgewerkt:%sdo",
+        "gobackorkick": "Ga terug naar de start, anders word je uit de race gezet:%ss",
+        "namealreadyused": "Er bestaat al een ras met deze naam.",
+        "notauthorized": "U bent niet geautoriseerd voor %{to}.",
+        "raceended": "Jij was de enige in de race, de race was afgelopen",
+        "alreadyrunning": "De race is al bezig",
+        "notexist": "Dit ras bestaat niet :(",
+        "stoppingrace": "De race stoppen:%s",
+        "racenotopen": "Race niet geopend:%s",
+        "notcreator": "Jij bent niet de schepper van het ras..",
+        "notstarted": "Deze race is nog niet begonnen.",
+        "nomoreraces": "Er kunnen geen races meer worden gemaakt!"
+    },
+    "success": {
+        "savedrace": "Race:%sis opgeslagen!",
+        "finishedbest": "Race eindigde in%s, met de beste ronde:%s",
+        "finished": "Race geëindigd in:%s",
+        "start": "GAAN!",
+        "cancreate": "Er kunnen weer races worden gemaakt!"
+    },
+    "primary": {
+        "LeaveRace": "Je hebt de race voltooid!",
+        "startinten": "De race begint over 10 seconden"
+    },
+    "general": {
+        "CheckL": "Controlepunt L",
+        "CheckR": "Controlepunt R",
+        "DNF": "DNF",
+        "unknown": "Onbekend",
+        "dothis": "doe dit",
+        "createraces": "rassen creëren"
+    },
+    "phonenotif": {
+        "wonWR": "Je hebt de WR van%sgewonnen met een tijd van:%s!",
+        "wonWR2": "Je hebt de WR van%sgewonnen met een tijd van:%s!",
+        "joinedrace": "%s.%sde race is toegevoegd!",
+        "LeaveRace": "%s.%sde race is afgeleverd!"
+    },
+    "commands": {
+        "cancelrace": "Annuleer lopende race..",
+        "togglesetup": "Race-instellingen in-/uitschakelen"
+    }
+}
