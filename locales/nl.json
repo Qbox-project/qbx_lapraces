@@ -13,14 +13,14 @@
         "notinarace": "Je doet niet mee aan een race..",
         "playerfinished": "%safgewerkt:%sdo",
         "gobackorkick": "Ga terug naar de start, anders word je uit de race gezet:%ss",
-        "namealreadyused": "Er bestaat al een ras met deze naam.",
+        "namealreadyused": "Er bestaat al een race met deze naam.",
         "notauthorized": "U bent niet geautoriseerd voor %{to}.",
         "raceended": "Jij was de enige in de race, de race was afgelopen",
         "alreadyrunning": "De race is al bezig",
-        "notexist": "Dit ras bestaat niet :(",
+        "notexist": "Deze race bestaat niet :(",
         "stoppingrace": "De race stoppen:%s",
         "racenotopen": "Race niet geopend:%s",
-        "notcreator": "Jij bent niet de schepper van het ras..",
+        "notcreator": "Jij bent niet de maker van deze race...",
         "notstarted": "Deze race is nog niet begonnen.",
         "nomoreraces": "Er kunnen geen races meer worden gemaakt!"
     },
@@ -41,12 +41,12 @@
         "DNF": "DNF",
         "unknown": "Onbekend",
         "dothis": "doe dit",
-        "createraces": "rassen creëren"
+        "createraces": "races maken"
     },
     "phonenotif": {
         "wonWR": "Je hebt de WR van%sgewonnen met een tijd van:%s!",
         "wonWR2": "Je hebt de WR van%sgewonnen met een tijd van:%s!",
-        "joinedrace": "%s.%sde race is toegevoegd!",
+        "joinedrace": "%s. %s doet mee aan de race!",
         "LeaveRace": "%s.%sde race is afgeleverd!"
     },
     "commands": {
